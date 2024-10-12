@@ -18,24 +18,30 @@ export class Sandbox extends ex.Scene {
 		// Create the code editor HTML setup when sandbox scene is activated
 		rootDiv.innerHTML = `
 			<section id="sandbox-editor">
-				<ace-editor
-					language="JavaScript"
-					max-lines="16"
-					editor-title="Code Editor">function onUpdate(gpio, context) {
+				<textarea>function onUpdate(gpio, context) {
 	// gpio[0] is engine
 	
-}</ace-editor>
+}</textarea>
 				<footer>
 					<button id="sandbox-pause">Pause</button>
 					<button id="sandbox-deploy">Deploy</button>
 				</footer>
 			</section>
 		`
-		const editor = document.getElementById('sandbox-editor')
+		const pauseButton = document.getElementById('sandbox-pause') as HTMLButtonElement
+		const deployButton = document.getElementById('sandbox-deploy') as HTMLButtonElement
+		deployButton.addEventListener('click', this.onDeploy.bind(this))
 	}
 
 	onDeactivate() {
 		rootDiv.innerHTML = ''
+	}
+
+	onDeploy() {
+		const editor = document.querySelector('#sandbox-editor>textarea') as HTMLTextAreaElement
+		const code = editor.value + `;onUpdate()`
+		const func = new Function(code)
+		func()
 	}
 
 	onInitialize(engine: ex.Engine) {

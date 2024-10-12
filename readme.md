@@ -21,5 +21,4 @@ Play now [here](https://excaliburjs.com/sample-shootemup)
 i love u <3
 
 * https://axassets.itch.io/spaceship-simple-assets
-* https://github.com/MarketingPipeline/Ace-Editor-Web-Component
-* https://github.com/ajaxorg/ace
+<!-- * https://github.com/ajaxorg/ace -->

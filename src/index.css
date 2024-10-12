@@ -5,6 +5,12 @@
   right: 0;
 }
 
+#sandbox-editor>textarea {
+  height: 128px;
+  width: 100%;
+  resize: none;
+}
+
 #sandbox-editor>footer {
   display: flex;
   flex-direction: row;
