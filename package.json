@@ -32,6 +32,7 @@
     "url": "https://github.com/excaliburjs/sample-shootemup/issues"
   },
   "dependencies": {
+    "ace-builds": "^1.36.2",
     "excalibur": "0.28.1"
   },
   "devDependencies": {

@@ -5,6 +5,7 @@ import { Console } from './actors/console'
 import { Ship } from './actors/ship'
 import Config from './config'
 import { Images } from './resources'
+import ace from 'ace-builds'
 
 const rootDiv = document.getElementById('rootDiv') as HTMLDivElement
 
@@ -19,16 +20,22 @@ export class Sandbox extends ex.Scene {
 		// Create the code editor HTML setup when sandbox scene is activated
 		rootDiv.innerHTML = `
 			<section id="sandbox-editor">
-				<textarea>function onUpdate(gpio, context) {
-	// gpio[0] is engine
-	
-}</textarea>
+					<div id="editor">function foo(items) {
+    				var x = "All this is syntax highlighted";
+    				return x;
+					}
+					</div>
+				<script>
+					</script>
 				<footer>
 					<button id="sandbox-pause">Pause</button>
 					<button id="sandbox-deploy">Deploy</button>
 				</footer>
 			</section>
 		`
+		var editor = ace.edit("editor");
+		editor.setTheme("ace/theme/monokai");
+		editor.session.setMode("ace/mode/javascript");
 		const pauseButton = document.getElementById('sandbox-pause') as HTMLButtonElement
 		const deployButton = document.getElementById('sandbox-deploy') as HTMLButtonElement
 		deployButton.addEventListener('click', this.onDeploy.bind(this))
