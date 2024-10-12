@@ -4,6 +4,7 @@ import Config from './config'
 import { Game } from './game'
 import { loader, Sounds } from './resources'
 import { Sandbox } from './sandbox'
+import './index.css'
 
 const gameCanvas = document.getElementById('gameCanvas') as HTMLCanvasElement
 const rootDiv = document.getElementById('rootDiv') as HTMLDivElement

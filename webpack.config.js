@@ -15,7 +15,7 @@ module.exports = {
 		},
 	},
 	resolve: {
-		extensions: ['.ts', '.js'],
+		extensions: ['.ts', '.tsx', '.js'],
 	},
 	output: {
 		filename: '[name].js',
@@ -39,6 +39,10 @@ module.exports = {
 			{
 				test: /\.(png|jpg|bmp|wav|mp3)$/,
 				type: 'asset/resource',
+			},
+			{
+				test: /\.css$/i,
+				use: ['style-loader', 'css-loader'],
 			},
 		],
 	},

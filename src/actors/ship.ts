@@ -137,45 +137,45 @@ export class Ship extends ex.Actor {
 	}
 
 	handleKeyEvent = (engine: ex.Engine, evt: ex.Input.KeyEvent) => {
-		let dir = ex.Vector.Zero.clone()
+		// let dir = ex.Vector.Zero.clone()
 
-		if (evt.key === ex.Input.Keys.Space) {
-			this.throttleFire ? this.throttleFire(engine) : null
-			if (this.vel.x !== 0 || this.vel.y !== 0) {
-				dir = this.vel.normalize()
-			}
-		}
-		// Some keys do the same thing
-		if (
-			evt.key === ex.Input.Keys.Up
-			|| evt.key === ex.Input.Keys.W
-		) {
-			dir.y += -1
-		}
+		// if (evt.key === ex.Input.Keys.Space) {
+		// 	this.throttleFire ? this.throttleFire(engine) : null
+		// 	if (this.vel.x !== 0 || this.vel.y !== 0) {
+		// 		dir = this.vel.normalize()
+		// 	}
+		// }
+		// // Some keys do the same thing
+		// if (
+		// 	evt.key === ex.Input.Keys.Up
+		// 	|| evt.key === ex.Input.Keys.W
+		// ) {
+		// 	dir.y += -1
+		// }
 
-		if (
-			evt.key === ex.Input.Keys.Left
-			|| evt.key === ex.Input.Keys.A
-		) {
-			dir.x += -1
-		}
+		// if (
+		// 	evt.key === ex.Input.Keys.Left
+		// 	|| evt.key === ex.Input.Keys.A
+		// ) {
+		// 	dir.x += -1
+		// }
 
-		if (
-			evt.key === ex.Input.Keys.Right
-			|| evt.key === ex.Input.Keys.D
-		) {
-			dir.x += 1
-		}
+		// if (
+		// 	evt.key === ex.Input.Keys.Right
+		// 	|| evt.key === ex.Input.Keys.D
+		// ) {
+		// 	dir.x += 1
+		// }
 
-		if (
-			evt.key === ex.Input.Keys.Down
-			|| evt.key === ex.Input.Keys.S
-		) {
-			dir.y += 1
-		}
+		// if (
+		// 	evt.key === ex.Input.Keys.Down
+		// 	|| evt.key === ex.Input.Keys.S
+		// ) {
+		// 	dir.y += 1
+		// }
 
-		if (dir.x !== 0 || dir.y !== 0) {
-			this.vel = dir.normalize().scale(Config.playerSpeed)
-		}
+		// if (dir.x !== 0 || dir.y !== 0) {
+		// 	this.vel = dir.normalize().scale(Config.playerSpeed)
+		// }
 	}
 }

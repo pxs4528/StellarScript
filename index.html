@@ -3,7 +3,12 @@
 <head>
    <title>🗡️Excalibur:ShootEmUp</title>
    <link rel="icon" type="image/x-icon" href="favicon.png" />
-   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open%20Sans" />
+   <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open%20Sans" /> -->
+
+   <!-- Ace Editor Web Component: https://github.com/MarketingPipeline/Ace-Editor-Web-Component -->
+   <script src="https://cdn.jsdelivr.net/gh/MarketingPipeline/Ace-Editor-Web-Component@1.0.2/dist/ace-editor-wc.min.js" integrity="sha384-VSmUU17a5PIX9V9oQOvxgEofKmaPPSedvGpOkeYxAk/rLohBTeAAvUkhjWX/hDuK" crossorigin="anonymous"></script>
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/MarketingPipeline/Ace-Editor-Web-Component@v1.0.2/dist/ace-editor-wc.min.css" integrity="sha384-htqvGOmvnVirh1rfnnLZ8EuIGa3g68MnJgvSXBpKFnCOSYwcj6tAtsiKMC6GHkbR" crossorigin="anonymous">
+
    <style>
       body {
          display: flex;
@@ -16,8 +21,9 @@
    </style>
 </head>
 <body>
+   <noscript>This game requires JavaScript.</noscript>
    <canvas id="gameCanvas" width="800" height="600"></canvas>
    <div id="rootDiv"></div>
-   <script type="text/javascript" src="./main.js"></script>
+   <script src="./main.js"></script>
 </body>
 </html>
