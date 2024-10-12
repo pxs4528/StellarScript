@@ -6,6 +6,7 @@ import { Game } from './game';
 import { Sandbox } from './sandbox';
 
 const gameCanvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
+const rootDiv = document.getElementById('rootDiv') as HTMLDivElement;
 
 async function waitForFontLoad(font: string, timeout = 2000, interval = 100) {
     return new Promise((resolve, reject) => {
