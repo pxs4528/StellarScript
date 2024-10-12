@@ -30,7 +30,7 @@ export class Console extends ex.Actor {
         });
 
         this.transform.coordPlane = ex.CoordPlane.Screen;
-        this.body.collisionType = ex.CollisionType.PreventCollision;
+        this.body.collisionType = ex.CollisionType.Active;
         this.graphics.anchor = Vector.Zero;
         this.graphics.use(new ex.Canvas({
             draw: (ctx) => this.draw(ctx),

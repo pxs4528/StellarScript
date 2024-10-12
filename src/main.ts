@@ -3,6 +3,9 @@ import * as ex from 'excalibur';
 import Config from './config';
 import { Sounds, loader } from './resources';
 import { Game } from './game';
+import { Sandbox } from './sandbox';
+
+const gameCanvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
 
 async function waitForFontLoad(font: string, timeout = 2000, interval = 100) {
     return new Promise((resolve, reject) => {
@@ -27,7 +30,8 @@ const engine = new ex.Engine({
     pixelRatio: 2,
     width: 1000,
     height: 800,
-    displayMode: ex.DisplayMode.FitScreen
+    displayMode: ex.DisplayMode.FitScreen,
+    canvasElement: gameCanvas,
 });
 engine.debug.entity.showName = true;
 engine.backgroundColor = ex.Color.Black;
@@ -35,7 +39,8 @@ engine.setAntialiasing(false);
 
 // Setup game scene
 engine.add('game', new Game());
-engine.goToScene('game');
+engine.add('sandbox', new Sandbox());
+engine.goToScene('sandbox');
 
 // Game events to handle
 engine.on('hidden', () => {
