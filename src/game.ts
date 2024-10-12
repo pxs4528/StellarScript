@@ -7,6 +7,7 @@ import { Baddie } from './actors/baddie';
 import Config from './config';
 
 import { animManager } from './actors/animation-manager';
+import { Console } from './actors/console';
 export class Game extends ex.Scene {
     random = new ex.Random(1337); // seeded random
 
@@ -22,6 +23,9 @@ export class Game extends ex.Scene {
 
         const healthBar = new HealthBar();
         engine.add(healthBar);
+
+        const console = new Console();
+        engine.add(console);
 
         const scoreLabel = new ex.Label({
             text: "Score: " + stats.score,

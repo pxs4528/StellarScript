@@ -14,6 +14,8 @@ const Config = {
    spawnTime : 3000,
    healthBarHeight : 25,
    healthBarWidth : 400,
+   consoleWidth : 800,
+   consoleHeight : 200,
    totalHp : 100
 }
 
