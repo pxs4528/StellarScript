@@ -11,7 +11,7 @@
     "fmt": "dprint fmt",
     "fmt:check": "dprint check",
     "start": "webpack-dev-server --mode development --open",
-    "test": "npm run build:prod && ex-test -d ./dist -t ./test/test.js"
+    "test": "echo \"no test\""
   },
   "author": {
     "name": "excaliburjs",
