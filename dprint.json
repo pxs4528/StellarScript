@@ -1,0 +1,19 @@
+{
+  "indentWidth": 3,
+  "lineWidth": 100,
+  "newLineKind": "lf",
+  "useTabs": true,
+  "typescript": {
+    "binaryExpression.operatorPosition": "nextLine",
+    "quoteStyle": "preferSingle",
+    "semiColons": "asi",
+    "singleBodyPosition": "nextLine",
+    "useBraces": "always"
+  },
+  "excludes": [
+    "**/node_modules"
+  ],
+  "plugins": [
+    "https://plugins.dprint.dev/typescript-0.93.0.wasm"
+  ]
+}

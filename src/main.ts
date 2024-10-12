@@ -1,72 +1,84 @@
 // Main Game Logic
-import * as ex from 'excalibur';
-import Config from './config';
-import { Sounds, loader } from './resources';
-import { Game } from './game';
-import { Sandbox } from './sandbox';
+import * as ex from 'excalibur'
+import Config from './config'
+import { Game } from './game'
+import { loader, Sounds } from './resources'
+import { Sandbox } from './sandbox'
 
-const gameCanvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
-const rootDiv = document.getElementById('rootDiv') as HTMLDivElement;
+const gameCanvas = document.getElementById('gameCanvas') as HTMLCanvasElement
+const rootDiv = document.getElementById('rootDiv') as HTMLDivElement
 
 async function waitForFontLoad(font: string, timeout = 2000, interval = 100) {
-    return new Promise((resolve, reject) => {
-        // repeatedly poll check
-        const poller = setInterval(async () => {
-        try {
-            await document.fonts.load(font);
-        } catch (err) {
-            reject(err);
-        }
-        if (document.fonts.check(font)) {
-            clearInterval(poller);
-            resolve(true);
-        }
-        }, interval);
-        setTimeout(() => clearInterval(poller), timeout);
-    });
+	return new Promise((resolve, reject) => {
+		// repeatedly poll check
+		const poller = setInterval(async () => {
+			try {
+				await document.fonts.load(font)
+			} catch (err) {
+				reject(err)
+			}
+			if (document.fonts.check(font)) {
+				clearInterval(poller)
+				resolve(true)
+			}
+		}, interval)
+		setTimeout(() => clearInterval(poller), timeout)
+	})
 }
 
 const engine = new ex.Engine({
-    backgroundColor: ex.Color.Black,
-    pixelRatio: 2,
-    width: 1000,
-    height: 800,
-    displayMode: ex.DisplayMode.FitScreen,
-    canvasElement: gameCanvas,
-});
-engine.debug.entity.showName = true;
-engine.backgroundColor = ex.Color.Black;
-engine.setAntialiasing(false);
+	backgroundColor: ex.Color.Black,
+	pixelRatio: 2,
+	width: 1000,
+	height: 800,
+	displayMode: ex.DisplayMode.FitScreen,
+	canvasElement: gameCanvas,
+})
+engine.debug.entity.showName = true
+engine.backgroundColor = ex.Color.Black
+engine.setAntialiasing(false)
 
 // Setup game scene
-engine.add('game', new Game());
-engine.add('sandbox', new Sandbox());
-engine.goToScene('sandbox');
+engine.add('game', new Game())
+engine.add('sandbox', new Sandbox())
+engine.goToScene('sandbox')
 
 // Game events to handle
 engine.on('hidden', () => {
-    console.log('pause');
-    engine.stop();
-});
+	console.log('pause')
+	engine.stop()
+})
 engine.on('visible', () => {
-    console.log('start');
-    engine.start();
-});
+	console.log('start')
+	engine.start()
+})
 
 engine.input.keyboard.on('press', (evt: ex.Input.KeyEvent) => {
-    if (evt.key === ex.Input.Keys.D) {
-      engine.toggleDebug();
-    }
-});
+	if (evt.key === ex.Input.Keys.D) {
+		engine.toggleDebug()
+	}
+})
 
-waitForFontLoad("normal 30px Open Sans").then(() => {
-    engine.start(loader).then(() => {
-        Sounds.laserSound.volume = Config.soundVolume;
-        Sounds.explodeSound.volume = Config.soundVolume;
-        Sounds.enemyFireSound.volume = Config.soundVolume;
-        Sounds.powerUp.volume = Config.soundVolume;
-        Sounds.rocketSound.volume = Config.soundVolume;
-        
-        console.log("Game Resources Loaded");
-    });
+waitForFontLoad('normal 30px Open Sans').then(() => {
+	engine.start(loader).then(() => {
+		Sounds.laserSound.volume = Config.soundVolume
+		Sounds.explodeSound.volume = Config.soundVolume
+		Sounds.enemyFireSound.volume = Config.soundVolume
+		Sounds.powerUp.volume = Config.soundVolume
+		Sounds.rocketSound.volume = Config.soundVolume
+
+		console.log('Game Resources Loaded')
+	})
+})
+
+function syncUiSize() {
+	rootDiv.style.top = `${gameCanvas.offsetTop}px`
+	rootDiv.style.left = `${gameCanvas.offsetLeft}px`
+	rootDiv.style.width = `${gameCanvas.offsetWidth}px`
+	rootDiv.style.height = `${gameCanvas.offsetHeight}px`
+}
+syncUiSize()
+
+window.addEventListener('resize', () => {
+	syncUiSize()
 })
