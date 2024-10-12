@@ -2,7 +2,7 @@
 import * as ex from 'excalibur'
 import Config from './config'
 import { Game } from './game'
-import { loader, Sounds } from './resources'
+import { Images, loader, Sounds } from './resources'
 import { Sandbox } from './sandbox'
 import './index.css'
 
@@ -40,6 +40,28 @@ engine.backgroundColor = ex.Color.Black
 engine.setAntialiasing(false)
 
 // Setup game scene
+
+if (!Images.backgroundImage) {
+	console.error('Background image not loaded')
+} else {
+	const backgroundSprite = Images.backgroundImage.toSprite()
+	backgroundSprite.destSize.width = engine.screen.resolution.width
+	backgroundSprite.destSize.height = engine.screen.resolution.height
+
+	// Create an actor for the background
+	const backgroundActor = new ex.Actor({
+		x: engine.screen.resolution.width / 2,
+		y: engine.screen.resolution.height / 2,
+		width: engine.screen.resolution.width,
+		height: engine.screen.resolution.height,
+	})
+	backgroundActor.z = -99
+	backgroundActor.graphics.anchor = ex.Vector.Zero
+	backgroundActor.graphics.use(backgroundSprite)
+
+	// Add the background actor to the engine
+	engine.add(backgroundActor)
+}
 engine.add('game', new Game())
 engine.add('sandbox', new Sandbox())
 engine.goToScene('sandbox')

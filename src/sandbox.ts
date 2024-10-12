@@ -4,6 +4,7 @@ import { Asteroid } from './actors/asteroid'
 import { Console } from './actors/console'
 import { Ship } from './actors/ship'
 import Config from './config'
+import { Images } from './resources'
 
 const rootDiv = document.getElementById('rootDiv') as HTMLDivElement
 
@@ -35,6 +36,19 @@ export class Sandbox extends ex.Scene {
 
 	onDeactivate() {
 		rootDiv.innerHTML = ''
+	}
+	onPostUpdate(_engine: ex.Engine, _delta: number): void {
+		// if paused stop the engine
+		const pauseButton = document.getElementById('sandbox-pause') as HTMLButtonElement
+		pauseButton.addEventListener('click', () => {
+			if (pauseButton.innerText === 'Pause') {
+				_engine.stop()
+				pauseButton.innerText = 'Play'
+			} else {
+				_engine.start()
+				pauseButton.innerText = 'Pause'
+			}
+		})
 	}
 
 	onDeploy() {
