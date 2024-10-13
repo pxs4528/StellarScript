@@ -17,6 +17,7 @@ const Config = {
 	consoleWidth: 700,
 	consoleHeight: 100,
 	totalHp: 100,
+	currentStripe: 19,
 }
 
 export default Config

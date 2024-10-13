@@ -38,7 +38,7 @@ export class Ship extends ex.Actor {
 	}
 
 	onInitialize(engine: ex.Engine) {
-		this.throttleFire = throttle(this.fire, Config.playerFireThrottle)
+		this.throttleFire = throttle(this.	fire, Config.playerFireThrottle)
 		this.on('precollision', (evt) => this.onPreCollision(evt))
 
 		// Keyboard
@@ -56,7 +56,7 @@ export class Ship extends ex.Actor {
 		// Get animation
 		const anim = ex.Animation.fromSpriteSheet(
 			gameSheet,
-			[0, 1, 2],
+			[19],
 			100,
 			ex.AnimationStrategy.Loop,
 		)
@@ -96,6 +96,17 @@ export class Ship extends ex.Actor {
 			animManager.play(this.explode, this.pos)
 			Sounds.explodeSound.play()
 			this.kill()
+		}
+
+		if (Config.currentStripe == 17) {
+			const anim = ex.Animation.fromSpriteSheet(
+				gameSheet,
+				[17],
+				100,
+				ex.AnimationStrategy.Loop,
+			)
+			anim.scale = new ex.Vector(4, 4)
+			this.graphics.use(anim)		
 		}
 
 		// Keep player in the viewport
