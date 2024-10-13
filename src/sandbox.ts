@@ -12,9 +12,13 @@ const rootDiv = document.getElementById('rootDiv') as HTMLDivElement
 export class Sandbox extends ex.Scene {
 	random = new ex.Random(1337) // seeded random
 
-	deployedCode = `function loop() {
-	// gpio[0]
-	
+	deployedCode = `const ENGINE_LEFT = 0;
+const ENGINE_RIGHT = 1;
+const LOW = 0;
+const HIGH = 1;
+
+function loop() {
+
 }`
 	sinceLastSimulationMs = 0
 	gpio = [0]
@@ -70,20 +74,23 @@ export class Sandbox extends ex.Scene {
 
 	private simulate() {
 		const gpio = this.gpio
-		Function(`
+		try {
+			Function(`
 			'use strict'
 			const { write, read } = this
 			${this.deployedCode}
 			;loop()
 		`).bind({
-			write(id: number, value: number) {
-				gpio[id] = value
-			},
-			read(id: number) {
-				return gpio[id]
-			},
-		})()
-
+				write(id: number, value: number) {
+					gpio[id] = value
+				},
+				read(id: number) {
+					return gpio[id]
+				},
+			})()
+		} catch (e) {
+			alert(e)
+		}
 		this.ship.isLeftEngineOn = Boolean(gpio[0])
 		this.ship.isRightEngineOn = Boolean(gpio[1])
 		this.ship.vel = ex.vec(0, gpio[0] ? -100 : 0)

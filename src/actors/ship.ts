@@ -42,7 +42,7 @@ export class Ship extends ex.Actor {
 	}
 
 	onInitialize(engine: ex.Engine) {
-		this.throttleFire = throttle(this.	fire, Config.playerFireThrottle)
+		this.throttleFire = throttle(this.fire, Config.playerFireThrottle)
 		this.on('precollision', (evt) => this.onPreCollision(evt))
 
 		// Keyboard
@@ -93,6 +93,16 @@ export class Ship extends ex.Actor {
 		this.throttleFire = undefined
 	}
 
+	onPreUpdate(engine: ex.Engine, delta: number): void {
+		if (this.isLeftEngineOn && !this.isRightEngineOn) {
+			// Rotate to the right
+			this.rotation += Math.PI / 1024
+		} else if (!this.isLeftEngineOn && this.isRightEngineOn) {
+			// Rotate to the left
+			this.rotation -= Math.PI / 1024
+		}
+	}
+
 	onPostUpdate(engine: ex.Engine, delta: number) {
 		if (stats.hp <= 0 && this.explode) {
 			// update game to display game over
@@ -110,7 +120,7 @@ export class Ship extends ex.Actor {
 			ex.AnimationStrategy.Loop,
 		)
 		anim.scale = new ex.Vector(4, 4)
-		this.graphics.use(anim)		
+		this.graphics.use(anim)
 
 		// Keep player in the viewport
 		if (this.pos.x < 0) {
