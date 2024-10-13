@@ -18,7 +18,7 @@
   flex-direction: column;
 }
 
-#terminal {
+#output {
   width: 100%;
   height: 150px;
   font-size: 14px;
@@ -90,10 +90,12 @@ footer {
   transform: scale(0.95);
   background-color: #ff6600;
 }
+
 #sandbox-collapse:hover {
   transform: scale(0.95);
   background-color: #ff6600;
 }
+
 #sandbox-pause:hover {
   transform: scale(0.95);
   background-color: #ff6600;
