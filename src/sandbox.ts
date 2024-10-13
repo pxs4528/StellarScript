@@ -10,17 +10,22 @@ import Config from './config'
 
 const rootDiv = document.getElementById('rootDiv') as HTMLDivElement
 
+const TICK_MS = 500
+const ENGINE_LEFT = 0
+const ENGINE_RIGHT = 1
+
 export class Sandbox extends ex.Scene {
 	random = new ex.Random(1337) // seeded random
 
-	deployedCode = `const ENGINE_LEFT = 0;
-const ENGINE_RIGHT = 1;
+	deployedCode = `const ENGINE_LEFT = ${ENGINE_LEFT};
+const ENGINE_RIGHT = ${ENGINE_RIGHT};
 const LOW = 0;
 const HIGH = 1;
 
 function loop() {
 
 }`
+	isSimulating = false
 	sinceLastSimulationMs = 0
 	gpio = [0]
 	ship!: Ship
@@ -95,40 +100,59 @@ function loop() {
 
 	onPreUpdate(_engine: ex.Engine, delta: number): void {
 		this.sinceLastSimulationMs += delta
-		if (this.sinceLastSimulationMs >= 500) {
+		if (this.isSimulating) {
+			this.sinceLastSimulationMs = 0
+		}
+		if (this.sinceLastSimulationMs >= TICK_MS) {
 			this.sinceLastSimulationMs = 0
 			this.simulate()
 		}
 	}
 
-	private simulate() {
+	private async simulate() {
 		const globals = this.globals
 		const gpio = this.gpio
 		try {
-			Function(`
-			'use strict'
-			const { write, read, g_get, g_set } = this
-			${this.deployedCode}
-			;loop()
-		`).bind({
+			this.isSimulating = true
+			await Function(`
+				'use strict'
+				const { delay, g_has, g_get, g_set, read, write } = this
+				${
+				this.deployedCode
+					.replace('function loop()', 'async function loop()')
+					.replace(/\bdelay\s*\(\s*(\d+)\s*\)/g, `await delay($1 * ${TICK_MS})`)
+			}
+				;return loop()
+			`).bind({
+				delay(ms: number) {
+					return new Promise((resolve) => setTimeout(resolve, ms))
+				},
+				g_has(name: string) {
+					return name in globals
+				},
 				g_get(name: string) {
 					return globals[name]
 				},
 				g_set(name: string, value: any) {
 					globals[name] = value
 				},
-				write(id: number, value: number) {
-					gpio[id] = value
-				},
 				read(id: number) {
 					return gpio[id]
+				},
+				write: (id: number, value: number) => {
+					gpio[id] = value
+					if (id === ENGINE_LEFT) {
+						this.ship.isLeftEngineOn = Boolean(value)
+					} else if (id === ENGINE_RIGHT) {
+						this.ship.isRightEngineOn = Boolean(value)
+					}
 				},
 			})()
 		} catch (e) {
 			alert(e)
+		} finally {
+			this.isSimulating = false
 		}
-		this.ship.isLeftEngineOn = Boolean(gpio[0])
-		this.ship.isRightEngineOn = Boolean(gpio[1])
 	}
 
 	onInitialize(engine: ex.Engine) {
