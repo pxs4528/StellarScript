@@ -1,4 +1,5 @@
 import 'ace-builds/src-noconflict/ace'
+import 'ace-builds/src-noconflict/mode-javascript'
 import 'ace-builds/src-noconflict/theme-github_dark'
 import ace from 'ace-builds'
 import * as ex from 'excalibur'
@@ -40,7 +41,7 @@ function loop() {
 				</footer>
 			</section>
 		`
-		const editor = ace.edit('editor')
+		const editor = ace.edit('editor', { useWorker: false })
 		editor.setTheme('ace/theme/github_dark')
 		editor.session.setMode('ace/mode/javascript')
 
@@ -106,7 +107,7 @@ function loop() {
 	onInitialize(engine: ex.Engine) {
 		engine.add(animManager)
 
-		const ship = new Ship(engine.halfDrawWidth, 1000, 80, 80)
+		const ship = new Ship(engine.halfDrawWidth, 900, 80, 80)
 		engine.add(ship)
 		this.ship = ship
 
