@@ -5,6 +5,7 @@ import { Game } from './game'
 import { Images, loader, Sounds } from './resources'
 import { Sandbox } from './sandbox'
 import './index.css'
+import { MainMenu } from './menu'
 
 const gameCanvas = document.getElementById('gameCanvas') as HTMLCanvasElement
 const rootDiv = document.getElementById('rootDiv') as HTMLDivElement
@@ -63,8 +64,9 @@ if (!Images.backgroundImage) {
 	engine.add(backgroundActor)
 }
 engine.add('game', new Game())
+engine.add('mainmenu', new MainMenu())
 engine.add('sandbox', new Sandbox())
-engine.goToScene('sandbox')
+engine.goToScene('mainmenu')
 
 // Game events to handle
 engine.on('hidden', () => {
