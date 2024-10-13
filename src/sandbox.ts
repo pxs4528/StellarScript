@@ -34,10 +34,13 @@ function loop() {
 		// Create the code editor HTML setup when sandbox scene is activated
 		rootDiv.innerHTML = `
 			<section id="sandbox-editor">
+				<button id="sandbox-collapse">Collapse</button>
+				<button id="sandbox-fullscreen">Full Screen</button>
 				<div id="editor">${this.deployedCode}</div>
 				<footer>
 					<button id="sandbox-pause">Pause</button>
 					<button id="sandbox-deploy">Deploy</button>
+					<button id="sandbox-reset">Reset</button>
 				</footer>
 			</section>
 		`
@@ -47,6 +50,10 @@ function loop() {
 
 		const pauseButton = document.getElementById('sandbox-pause') as HTMLButtonElement
 		const deployButton = document.getElementById('sandbox-deploy') as HTMLButtonElement
+		const collapseButton = document.getElementById('sandbox-collapse') as HTMLButtonElement
+		const sandboxEditor = document.getElementById('editor') as HTMLDivElement
+		const fullscreenButton = document.getElementById('sandbox-fullscreen') as HTMLButtonElement
+
 		pauseButton.addEventListener('click', () => {
 			if (pauseButton.innerText === 'Pause') {
 				context.engine.stop()
@@ -59,6 +66,26 @@ function loop() {
 		deployButton.addEventListener('click', () => {
 			const code = editor.getValue()
 			this.deployedCode = code
+		})
+		collapseButton.addEventListener('click', () => {
+			if (sandboxEditor.style.display === 'none') {
+				sandboxEditor.style.display = 'block'
+				fullscreenButton.style.display = 'inline-block'
+				collapseButton.innerText = 'Collapse'
+			} else {
+				sandboxEditor.style.display = 'none'
+				fullscreenButton.style.display = 'none'
+				collapseButton.innerText = 'Expand'
+			}
+		})
+		fullscreenButton.addEventListener('click', () => {
+			if (sandboxEditor.style.height === '70vh') {
+				sandboxEditor.style.height = '20vh'
+				fullscreenButton.innerText = 'Full Screen'
+			} else {
+				sandboxEditor.style.height = '70vh'
+				fullscreenButton.innerText = 'Exit Full'
+			}
 		})
 	}
 

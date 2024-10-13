@@ -31,7 +31,9 @@ footer {
 }
 
 #sandbox-pause,
-#sandbox-deploy {
+#sandbox-deploy,
+#sandbox-collapse,
+#sandbox-fullscreen {
   background-color: #ffcc00;
   color: #000000;
   border: 3px solid #ff6600;
@@ -44,6 +46,27 @@ footer {
   transition: transform 0.1s;
 }
 
+#sandbox-reset {
+  background-color: #ce3434;
+  color: #000000;
+  border: 3px solid #9c0000;
+  /* Adjust border color for pause */
+  border-radius: 0;
+  padding: 8px 16px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 14px;
+  text-shadow: 1px 1px #000000;
+  transition: transform 0.1s;
+}
+
+#sandbox-fullscreen:hover {
+  transform: scale(0.95);
+  background-color: #ff6600;
+}
+#sandbox-collapse:hover {
+  transform: scale(0.95);
+  background-color: #ff6600;
+}
 #sandbox-pause:hover {
   transform: scale(0.95);
   background-color: #ff6600;
