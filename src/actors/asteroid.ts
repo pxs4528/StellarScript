@@ -1,6 +1,7 @@
 import * as ex from 'excalibur'
 import Config from '../config'
 import { explosionSpriteSheet, gameSheet, Images, Sounds } from '../resources'
+import { Sandbox } from '../sandbox'
 import { stats } from '../stats'
 import { animManager } from './animation-manager'
 import { Console } from './console'
@@ -10,6 +11,9 @@ export class Asteroid extends ex.Actor {
 
 	private anim?: ex.Animation
 	private explode?: ex.Animation
+
+	isExploding = false
+
 	constructor(x: number, y: number, width: number, height: number) {
 		super({
 			pos: new ex.Vector(x, y),
@@ -18,17 +22,16 @@ export class Asteroid extends ex.Actor {
 		})
 
 		// Passive receives collision events but does not participate in resolution
-		this.body.collisionType = ex.CollisionType.Active
+		this.body.collisionType = ex.CollisionType.Passive
 		// Enemy groups does not collide with itself
-		this.body.group = Asteroid.group
-
-		// Setup listeners
-		this.on('precollision', (evt) => this.onPreCollision(evt))
+		// this.body.group = Asteroid.group
 	}
 
 	// OnInitialize is called before the 1st actor update
 	onInitialize(engine: ex.Engine) {
 		// Initialize actor
+		this.graphics.onPostDraw = this.onPostDraw.bind(this)
+		this.on('precollision', (evt) => this.onPreCollision(evt))
 
 		// Setup visuals
 		this.anim = ex.Animation.fromSpriteSheet(
@@ -70,22 +73,24 @@ export class Asteroid extends ex.Actor {
 		// if (this.pos.y < 0 || this.pos.y > engine.drawHeight) {
 		// this.vel.y *= -1
 		// }
+		if (this.isExploding) {
+			this.vel = ex.Vector.Zero
+			this.body.collisionType = ex.CollisionType.PreventCollision
+		}
 	}
 
 	private onPreCollision(evt: ex.PreCollisionEvent) {
-		if (evt.other instanceof Asteroid) {
-			// Asteroid-to-asteroid collision
-			console.log('Asteroid collision')
-			this.reverseDirection()
-			evt.other.reverseDirection() // Reverse the direction of the other asteroid
-		} else {
-			// Collision with non-asteroid object
+		// if (evt.other instanceof Asteroid) {
+		// 	// Asteroid-to-asteroid collision
+		// 	this.reverseDirection()
+		// 	evt.other.reverseDirection() // Reverse the direction of the other asteroid
+		// } else {
+		// Collision with non-asteroid object
+		if (!this.isExploding) {
 			Sounds.explodeSound.play()
-			if (this.explode) {
-				animManager.play(this.explode, this.pos)
-			}
-			this.kill()
+			this.isExploding = true
 		}
+		// }
 	}
 	private reverseDirection() {
 		// Get current velocity
@@ -95,10 +100,19 @@ export class Asteroid extends ex.Actor {
 		this.vel = currentVel.negate()
 
 		// Optionally, add a small random offset to avoid asteroids getting stuck
-		const randomOffset = new ex.Vector(
-			(Math.random() - 0.5) * 20,
-			(Math.random() - 0.5) * 20,
-		)
-		this.vel = this.vel.add(randomOffset)
+		// const randomOffset = new ex.Vector(
+		// 	(Math.random() - 0.5) * 20,
+		// 	(Math.random() - 0.5) * 20,
+		// )
+		// this.vel = this.vel.add(randomOffset)
+	}
+
+	onPostDraw() {
+		if (this.isExploding && this.explode) {
+			this.graphics.use(this.explode)
+			if (this.explode.done) {
+				this.kill()
+			}
+		}
 	}
 }

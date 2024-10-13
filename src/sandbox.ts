@@ -3,9 +3,7 @@ import 'ace-builds/src-noconflict/mode-javascript'
 import 'ace-builds/src-noconflict/theme-github_dark'
 import ace from 'ace-builds'
 import * as ex from 'excalibur'
-import { animManager } from './actors/animation-manager'
 import { Asteroid } from './actors/asteroid'
-import { Background } from './actors/background'
 import { Ship } from './actors/ship'
 import Config from './config'
 import { Images } from './resources'
@@ -140,7 +138,7 @@ function loop() {
 		}
 	}
 
-	onPostUpdate(_engine: ex.Engine, _delta: number): void {
+	onPostUpdate(engine: ex.Engine, delta: number): void {
 		this.camera.pos = this.ship.pos
 	}
 
@@ -221,15 +219,16 @@ function loop() {
 	}
 
 	onInitialize(engine: ex.Engine) {
-		engine.add(animManager)
-
 		const tileMap = new ex.TileMap({
-			rows: 128,
-			columns: 128,
+			rows: Config.backgroundTileCount,
+			columns: Config.backgroundTileCount,
 			tileWidth: Config.backgroundTileSize,
 			tileHeight: Config.backgroundTileSize,
 		})
-		tileMap.pos = ex.vec(-64 * Config.backgroundTileSize, -64 * Config.backgroundTileSize)
+		tileMap.pos = ex.vec(
+			-Config.backgroundTileCount * Config.backgroundTileSize / 2,
+			-Config.backgroundTileCount * Config.backgroundTileSize / 2,
+		)
 		const sprite = Images.stars.toSprite()
 		sprite.destSize.width = Config.backgroundTileSize
 		sprite.destSize.height = Config.backgroundTileSize

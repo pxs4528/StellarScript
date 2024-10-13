@@ -157,11 +157,12 @@ export class Ship extends ex.Actor {
 
 	private fire = (engine: ex.Engine) => {
 		const pos = this.pos.add(ex.vec(0, -48).rotate(this.rotation))
+		const vel = ex.Vector.Up.scale(Config.playerBulletVelocity).rotate(this.rotation)
 		const bullet = new Bullet(
 			pos.x,
 			pos.y,
-			0,
-			-Config.playerBulletVelocity,
+			vel.x,
+			vel.y,
 			Ship.group,
 		)
 		this.flipBarrel = !this.flipBarrel

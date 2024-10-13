@@ -3,6 +3,7 @@
 const Config = {
 	playerSpeedPerEngine: 300,
 	physicsMode: 'simple',
+	backgroundTileCount: 128,
 	backgroundTileSize: 600,
 	playerBulletVelocity: 600,
 	playerFireThrottle: 500,

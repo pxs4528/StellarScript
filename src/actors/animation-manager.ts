@@ -9,6 +9,7 @@ export class AnimationManager extends ex.Actor {
 	private animations: AnimationNode[] = []
 	constructor() {
 		super({
+			name: 'AnimationManager',
 			pos: ex.Vector.Zero,
 			width: 0,
 			height: 0,
