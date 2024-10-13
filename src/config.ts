@@ -1,9 +1,12 @@
 // configuration
 
 const Config = {
+	playerSpeedPerEngine: 300,
+	physicsMode: 'simple',
+	backgroundTileSize: 600,
+
 	soundVolume: .1,
 	playerBulletVelocity: -600,
-	playerSpeed: 500,
 	playerFireThrottle: 200,
 	missileSpeed: -400,
 	enemyBulletVelocity: -300,
@@ -18,7 +21,6 @@ const Config = {
 	consoleHeight: 100,
 	totalHp: 100,
 	currentStripe: 19,
-	physicsMode: 'simple',
 }
 
 export default Config
