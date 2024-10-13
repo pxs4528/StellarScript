@@ -45,7 +45,9 @@ function loop() {
 			<section id="sandbox-editor">
 				<button id="sandbox-collapse">Collapse</button>
 				<button id="sandbox-fullscreen">Full Screen</button>
+				<button id="switch">Terminal</button>
 				<div id="editor">${this.deployedCode}</div>
+				<textarea id="terminal" readonly style="display: none"></textarea>
 				<footer>
 					<button id="sandbox-pause">Pause</button>
 					<button id="sandbox-deploy">Deploy</button>
@@ -62,7 +64,10 @@ function loop() {
 		const collapseButton = document.getElementById('sandbox-collapse') as HTMLButtonElement
 		const sandboxEditor = document.getElementById('editor') as HTMLDivElement
 		const fullscreenButton = document.getElementById('sandbox-fullscreen') as HTMLButtonElement
-
+		const switchButton = document.getElementById('switch') as HTMLButtonElement
+		const terminal = document.getElementById('terminal') as HTMLTextAreaElement
+		const resetButton = document.getElementById('sandbox-reset') as HTMLButtonElement
+	
 		pauseButton.addEventListener('click', () => {
 			if (pauseButton.innerText === 'Pause') {
 				context.engine.stop()
@@ -96,6 +101,25 @@ function loop() {
 				fullscreenButton.innerText = 'Exit Full'
 			}
 		})
+		switchButton.addEventListener('click', () => {
+			if (sandboxEditor.style.display === 'none') {
+				sandboxEditor.style.display = 'block'
+				terminal.style.display = 'none'
+				switchButton.innerText = 'Terminal'
+				fullscreenButton.style.display = 'inline-block'
+				collapseButton.style.display = 'inline-block'
+			} else {
+				sandboxEditor.style.display = 'none'
+				terminal.style.display = 'block'
+				switchButton.innerText = 'Editor'
+				fullscreenButton.style.display = 'none'
+				collapseButton.style.display = 'none'
+			}
+		})
+		resetButton.addEventListener('click', () => {
+			console.log('reset')
+		})
+	
 	}
 
 	onDeactivate() {
@@ -119,7 +143,7 @@ function loop() {
 			this.isSimulating = true
 			await Function(`
 				'use strict'
-				const { delay, g_has, g_get, g_set, read, write } = this
+				const { print, delay, g_has, g_get, g_set, read, write } = this
 				${
 				this.deployedCode
 					.replace('function loop()', 'async function loop()')
@@ -127,6 +151,13 @@ function loop() {
 			}
 				;return loop()
 			`).bind({
+				print(...args: any[]) {
+					const terminal = document.getElementById('terminal') as HTMLTextAreaElement;
+    				const currentTime = new Date().toLocaleTimeString();
+    				terminal.textContent += `[${currentTime}] ` + args.join(' ') + '\n';
+					terminal.scrollTop = terminal.scrollHeight
+				}
+				,
 				delay(ms: number) {
 					return new Promise((resolve) => setTimeout(resolve, ms))
 				},

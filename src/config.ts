@@ -18,6 +18,7 @@ const Config = {
 	consoleHeight: 100,
 	totalHp: 100,
 	currentStripe: 19,
+	physicsMode: 'simple',
 }
 
 export default Config
