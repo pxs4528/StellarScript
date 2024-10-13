@@ -30,12 +30,12 @@ async function waitForFontLoad(font: string, timeout = 2000, interval = 100) {
 const engine = new ex.Engine({
 	backgroundColor: ex.Color.Black,
 	pixelRatio: 2,
-	width: 1000,
-	height: 800,
+	width: 2000,
+	height: 1400,
 	displayMode: ex.DisplayMode.FitScreen,
 	canvasElement: gameCanvas,
 })
-engine.debug.entity.showName = true
+// engine.debug.entity.showName = true
 engine.backgroundColor = ex.Color.Black
 engine.setAntialiasing(false)
 

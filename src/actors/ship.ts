@@ -93,14 +93,17 @@ export class Ship extends ex.Actor {
 		this.throttleFire = undefined
 	}
 
-	onPreUpdate(engine: ex.Engine, delta: number): void {
+	onPreUpdate(_engine: ex.Engine, delta: number): void {
 		if (this.isLeftEngineOn && !this.isRightEngineOn) {
 			// Rotate to the right
-			this.rotation += Math.PI / 1024
+			this.body.angularVelocity += Math.PI / (delta * 32)
 		} else if (!this.isLeftEngineOn && this.isRightEngineOn) {
 			// Rotate to the left
-			this.rotation -= Math.PI / 1024
+			this.body.angularVelocity -= Math.PI / (delta * 32)
 		}
+		const numEnginesOn = [this.isLeftEngineOn, this.isRightEngineOn].filter((v) => v).length
+		const speed = numEnginesOn * 50
+		this.body.vel = ex.vec(0, -speed).rotate(this.rotation)
 	}
 
 	onPostUpdate(engine: ex.Engine, delta: number) {

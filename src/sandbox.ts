@@ -1,11 +1,11 @@
+import 'ace-builds/src-noconflict/ace'
+import 'ace-builds/src-noconflict/theme-github_dark'
 import ace from 'ace-builds'
 import * as ex from 'excalibur'
 import { animManager } from './actors/animation-manager'
 import { Asteroid } from './actors/asteroid'
-import { Console } from './actors/console'
 import { Ship } from './actors/ship'
 import Config from './config'
-import { gameSheet, Images } from './resources'
 
 const rootDiv = document.getElementById('rootDiv') as HTMLDivElement
 
@@ -23,6 +23,7 @@ function loop() {
 	sinceLastSimulationMs = 0
 	gpio = [0]
 	ship!: Ship
+	globals: Record<string, any> = {}
 
 	constructor() {
 		super()
@@ -40,7 +41,7 @@ function loop() {
 			</section>
 		`
 		const editor = ace.edit('editor')
-		editor.setTheme('ace/theme/tomorrow_night')
+		editor.setTheme('ace/theme/github_dark')
 		editor.session.setMode('ace/mode/javascript')
 
 		const pauseButton = document.getElementById('sandbox-pause') as HTMLButtonElement
@@ -73,14 +74,21 @@ function loop() {
 	}
 
 	private simulate() {
+		const globals = this.globals
 		const gpio = this.gpio
 		try {
 			Function(`
 			'use strict'
-			const { write, read } = this
+			const { write, read, g_get, g_set } = this
 			${this.deployedCode}
 			;loop()
 		`).bind({
+				g_get(name: string) {
+					return globals[name]
+				},
+				g_set(name: string, value: any) {
+					globals[name] = value
+				},
 				write(id: number, value: number) {
 					gpio[id] = value
 				},
@@ -93,13 +101,12 @@ function loop() {
 		}
 		this.ship.isLeftEngineOn = Boolean(gpio[0])
 		this.ship.isRightEngineOn = Boolean(gpio[1])
-		this.ship.vel = ex.vec(0, gpio[0] ? -100 : 0)
 	}
 
 	onInitialize(engine: ex.Engine) {
 		engine.add(animManager)
 
-		const ship = new Ship(engine.halfDrawWidth, 500, 80, 80)
+		const ship = new Ship(engine.halfDrawWidth, 1000, 80, 80)
 		engine.add(ship)
 		this.ship = ship
 
