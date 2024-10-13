@@ -77,9 +77,9 @@ engine.on('visible', () => {
 })
 
 engine.input.keyboard.on('press', (evt: ex.Input.KeyEvent) => {
-	if (evt.key === ex.Input.Keys.D) {
-		engine.toggleDebug()
-	}
+	// if (evt.key === ex.Input.Keys.D) {
+	// 	engine.toggleDebug()
+	// }
 })
 
 waitForFontLoad('normal 30px Open Sans').then(() => {
