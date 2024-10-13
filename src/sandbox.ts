@@ -5,8 +5,10 @@ import ace from 'ace-builds'
 import * as ex from 'excalibur'
 import { animManager } from './actors/animation-manager'
 import { Asteroid } from './actors/asteroid'
+import { Background } from './actors/background'
 import { Ship } from './actors/ship'
 import Config from './config'
+import { Images } from './resources'
 
 const rootDiv = document.getElementById('rootDiv') as HTMLDivElement
 
@@ -21,8 +23,8 @@ export class Sandbox extends ex.Scene {
 
 	deployedCode = `const ENGINE_LEFT = ${ENGINE_LEFT};
 const ENGINE_RIGHT = ${ENGINE_RIGHT};
-const SENSOR_LEFT = ${SENSOR_LEFT}
-const SENSOR_RIGHT = ${SENSOR_RIGHT}
+const SENSOR_LEFT = ${SENSOR_LEFT};
+const SENSOR_RIGHT = ${SENSOR_RIGHT};
 const LOW = 0;
 const HIGH = 1;
 
@@ -125,18 +127,22 @@ function loop() {
 		rootDiv.innerHTML = ''
 	}
 
-	onPreUpdate(_engine: ex.Engine, delta: number): void {
+	onPreUpdate(engine: ex.Engine, delta: number): void {
 		this.sinceLastSimulationMs += delta
 		if (this.isSimulating) {
 			this.sinceLastSimulationMs = 0
 		}
 		if (this.sinceLastSimulationMs >= TICK_MS) {
 			this.sinceLastSimulationMs = 0
-			this.simulate()
+			this.simulate(engine)
 		}
 	}
 
-	private async simulate() {
+	onPostUpdate(_engine: ex.Engine, _delta: number): void {
+		this.camera.pos = this.ship.pos
+	}
+
+	private async simulate(engine: ex.Engine) {
 		const globals = this.globals
 		try {
 			this.isSimulating = true
@@ -151,7 +157,7 @@ function loop() {
 				;return loop()
 			`).bind({
 				delay(ms: number) {
-					return new Promise((resolve) => setTimeout(resolve, ms))
+					return new Promise<void>((resolve) => engine.clock.schedule(resolve, ms))
 				},
 				g_has(name: string) {
 					return name in globals
@@ -210,6 +216,21 @@ function loop() {
 
 	onInitialize(engine: ex.Engine) {
 		engine.add(animManager)
+
+		const tileMap = new ex.TileMap({
+			rows: 128,
+			columns: 128,
+			tileWidth: Config.backgroundTileSize,
+			tileHeight: Config.backgroundTileSize,
+		})
+		tileMap.pos = ex.vec(-64 * Config.backgroundTileSize, -64 * Config.backgroundTileSize)
+		const sprite = Images.stars.toSprite()
+		sprite.destSize.width = Config.backgroundTileSize
+		sprite.destSize.height = Config.backgroundTileSize
+		for (const tile of tileMap.tiles) {
+			tile.addGraphic(sprite)
+		}
+		this.add(tileMap)
 
 		const ship = new Ship(engine.halfDrawWidth, 900, 80, 80)
 		engine.add(ship)

@@ -8,7 +8,7 @@ import fighterFile from '../res/fighter.png'
 import gameSheetFile from '../res/gamesheetFinal.png'
 import hitFile from '../res/hit.wav'
 import laserFile from '../res/laser.wav'
-import backgroundImage from '../res/more/stars.png'
+import starsFile from '../res/more/stars.png'
 import powerupFile from '../res/powerup.wav'
 import rocketFile from '../res/rocket.wav'
 import spriteexplosionFile from '../res/spriteexplosion.png'
@@ -19,7 +19,7 @@ const Images: { [key: string]: ex.ImageSource } = {
 	asteroid: new ex.ImageSource(asteroidFile),
 	explosion: new ex.ImageSource(spriteexplosionFile),
 	sheet: new ex.ImageSource(gameSheetFile),
-	backgroundImage: new ex.ImageSource(backgroundImage),
+	stars: new ex.ImageSource(starsFile),
 }
 
 const Sounds: { [key: string]: ex.Sound } = {

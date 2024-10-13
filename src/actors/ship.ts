@@ -100,7 +100,7 @@ export class Ship extends ex.Actor {
 
 		// Change velocity based on engines
 		const numEnginesOn = [this.isLeftEngineOn, this.isRightEngineOn].filter((v) => v).length
-		const speed = numEnginesOn * 50
+		const speed = numEnginesOn * Config.playerSpeedPerEngine
 		this.body.vel = ex.vec(0, -speed).rotate(this.rotation)
 	}
 
@@ -111,20 +111,6 @@ export class Ship extends ex.Actor {
 			animManager.play(this.explode, this.pos)
 			Sounds.explodeSound.play()
 			this.kill()
-		}
-
-		// Keep player in the viewport
-		if (this.pos.x < 0) {
-			this.pos.x = 0
-		}
-		if (this.pos.y < 0) {
-			this.pos.y = 0
-		}
-		if (this.pos.x > engine.drawWidth - this.width) {
-			this.pos.x = engine.drawWidth - this.width
-		}
-		if (this.pos.y > engine.drawHeight - this.height) {
-			this.pos.y = engine.drawHeight - this.height
 		}
 
 		// Update sprite based on engines
