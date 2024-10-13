@@ -7,31 +7,46 @@
   max-width: 100%; /* Ensure it doesn't exceed the container width */
 }
 
-#sandbox-editor>textarea {
-  height: 128px;
-  width: 100%;
-  resize: none;
-}
-
-#sandbox-editor>footer {
-  display: flex;
-  flex-direction: row;
-  gap: 4px;
-  justify-content: end;
-}
-
-#sandbox-pause {
-  
-}
-
 #editor {
-  position: absolute;
   width: 650px;
   height: 150px;
+  margin-bottom: 10px; /* Add space below the editor */
   display: flex;
-  gap: 4px;
-  flex-direction: row;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
+  flex-direction: column; /* Ensure the editor content is displayed in a column */
+}
+
+footer {
+  display: flex;
+  flex-direction: row; /* Align buttons in a row */
+  gap: 4px; /* Space between buttons */
+  justify-content: flex-end; /* Align buttons to the right */
+}
+
+#sandbox-pause,
+#sandbox-deploy {
+  background-color: #ffcc00;
+  color: #000000;
+  border: 3px solid #ff6600; /* Adjust border color for pause */
+  border-radius: 0;
+  padding: 8px 16px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 14px;
+  text-shadow: 1px 1px #ff6600;
+  transition: transform 0.1s;
+}
+
+#sandbox-pause:hover {
+  transform: scale(0.95);
+  background-color: #ff6600;
+}
+
+#sandbox-deploy {
+  background-color: #0fb647;
+  border: 3px solid #032c13; /* Adjust border color for deploy */
+  text-shadow: 1px 1px #032c13;
+}
+
+#sandbox-deploy:hover {
+  transform: scale(0.95);
+  background-color: #ff6600;
 }
