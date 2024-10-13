@@ -20,7 +20,7 @@ export class Asteroid extends ex.Actor {
 		// Passive receives collision events but does not participate in resolution
 		this.body.collisionType = ex.CollisionType.Active
 		// Enemy groups does not collide with itself
-		// this.body.group = Asteroid.group
+		this.body.group = Asteroid.group
 
 		// Setup listeners
 		this.on('precollision', (evt) => this.onPreCollision(evt))

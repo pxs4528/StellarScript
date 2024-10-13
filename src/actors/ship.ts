@@ -3,6 +3,7 @@ import Config from '../config'
 import { explosionSpriteSheet, gameSheet, Sounds } from '../resources'
 import { stats } from '../stats'
 import { animManager } from './animation-manager'
+import { Asteroid } from './asteroid'
 import { Baddie } from './baddie'
 import { Bullet } from './bullet'
 
@@ -28,6 +29,8 @@ export class Ship extends ex.Actor {
 
 	isLeftEngineOn = false
 	isRightEngineOn = false
+	isLeftSensorTriggered = false
+	isRightSensorTriggered = false
 
 	constructor(x: number, y: number, width: number, height: number) {
 		super({
@@ -44,18 +47,6 @@ export class Ship extends ex.Actor {
 	onInitialize(engine: ex.Engine) {
 		this.throttleFire = throttle(this.fire, Config.playerFireThrottle)
 		this.on('precollision', (evt) => this.onPreCollision(evt))
-
-		// Keyboard
-		engine.input.keyboard.on('hold', (evt) => this.handleKeyEvent(engine, evt))
-		engine.input.keyboard.on('release', (evt: ex.Input.KeyEvent) => {
-			if (evt.key !== ex.Input.Keys.Space) {
-				this.vel = ex.Vector.Zero.clone()
-			}
-		})
-
-		// Pointer
-		engine.input.pointers.primary.on('down', (evt) => this.handlePointerEvent(engine, evt))
-		engine.input.pointers.primary.on('up', () => this.vel = ex.Vector.Zero.clone())
 
 		// Get animation
 		const anim = ex.Animation.fromSpriteSheet(
@@ -94,13 +85,20 @@ export class Ship extends ex.Actor {
 	}
 
 	onPreUpdate(_engine: ex.Engine, delta: number): void {
+		// Change angular velocity based on engines
 		if (this.isLeftEngineOn && !this.isRightEngineOn) {
 			// Rotate to the right
-			this.body.angularVelocity += Math.PI / (delta * 32)
+			// this.body.angularVelocity += Math.PI / (delta * 32)
+			this.body.angularVelocity = Math.PI / (delta / 2)
 		} else if (!this.isLeftEngineOn && this.isRightEngineOn) {
 			// Rotate to the left
-			this.body.angularVelocity -= Math.PI / (delta * 32)
+			// this.body.angularVelocity -= Math.PI / (delta * 32)
+			this.body.angularVelocity = Math.PI / (delta / 2)
+		} else {
+			this.body.angularVelocity = 0
 		}
+
+		// Change velocity based on engines
 		const numEnginesOn = [this.isLeftEngineOn, this.isRightEngineOn].filter((v) => v).length
 		const speed = numEnginesOn * 50
 		this.body.vel = ex.vec(0, -speed).rotate(this.rotation)
@@ -115,16 +113,6 @@ export class Ship extends ex.Actor {
 			this.kill()
 		}
 
-		const sprite = 16 + (!this.isLeftEngineOn ? 2 : 0) + (!this.isRightEngineOn ? 1 : 0)
-		const anim = ex.Animation.fromSpriteSheet(
-			gameSheet,
-			[sprite],
-			100,
-			ex.AnimationStrategy.Loop,
-		)
-		anim.scale = new ex.Vector(4, 4)
-		this.graphics.use(anim)
-
 		// Keep player in the viewport
 		if (this.pos.x < 0) {
 			this.pos.x = 0
@@ -138,6 +126,32 @@ export class Ship extends ex.Actor {
 		if (this.pos.y > engine.drawHeight - this.height) {
 			this.pos.y = engine.drawHeight - this.height
 		}
+
+		// Update sprite based on engines
+		const sprite = 16 + (!this.isLeftEngineOn ? 2 : 0) + (!this.isRightEngineOn ? 1 : 0)
+		const anim = ex.Animation.fromSpriteSheet(
+			gameSheet,
+			[sprite],
+			100,
+			ex.AnimationStrategy.Loop,
+		)
+		anim.scale = new ex.Vector(4, 4)
+		this.graphics.use(anim)
+
+		// Update sensor outputs
+		const up = ex.Vector.Up.rotate(this.body.rotation)
+		const leftRay = new ex.Ray(
+			this.pos.add(up.scale(32)).add(ex.Vector.Left.scale(64).rotate(this.body.rotation)),
+			up,
+		)
+		const leftHits = this.scene.physics.rayCast(leftRay, { collisionGroup: Asteroid.group })
+		this.isLeftSensorTriggered = !!leftHits.length
+		const rightRay = new ex.Ray(
+			this.pos.add(up.scale(32)).add(ex.Vector.Right.scale(64).rotate(this.body.rotation)),
+			up,
+		)
+		const rightHits = this.scene.physics.rayCast(rightRay, { collisionGroup: Asteroid.group })
+		this.isRightSensorTriggered = !!rightHits.length
 	}
 
 	private fire = (engine: ex.Engine) => {
@@ -151,58 +165,5 @@ export class Ship extends ex.Actor {
 		this.flipBarrel = !this.flipBarrel
 		Sounds.laserSound.play()
 		engine.add(bullet)
-	}
-
-	handlePointerEvent = (engine: ex.Engine, evt: ex.Input.PointerEvent) => {
-		let dir = evt.worldPos.sub(this.pos)
-		let distance = dir.size
-		if (distance > 50) {
-			this.vel = dir.scale(Config.playerSpeed / distance)
-		} else {
-			this.throttleFire ? this.throttleFire(engine) : null
-		}
-	}
-
-	handleKeyEvent = (engine: ex.Engine, evt: ex.Input.KeyEvent) => {
-		// let dir = ex.Vector.Zero.clone()
-
-		// if (evt.key === ex.Input.Keys.Space) {
-		// 	this.throttleFire ? this.throttleFire(engine) : null
-		// 	if (this.vel.x !== 0 || this.vel.y !== 0) {
-		// 		dir = this.vel.normalize()
-		// 	}
-		// }
-		// // Some keys do the same thing
-		// if (
-		// 	evt.key === ex.Input.Keys.Up
-		// 	|| evt.key === ex.Input.Keys.W
-		// ) {
-		// 	dir.y += -1
-		// }
-
-		// if (
-		// 	evt.key === ex.Input.Keys.Left
-		// 	|| evt.key === ex.Input.Keys.A
-		// ) {
-		// 	dir.x += -1
-		// }
-
-		// if (
-		// 	evt.key === ex.Input.Keys.Right
-		// 	|| evt.key === ex.Input.Keys.D
-		// ) {
-		// 	dir.x += 1
-		// }
-
-		// if (
-		// 	evt.key === ex.Input.Keys.Down
-		// 	|| evt.key === ex.Input.Keys.S
-		// ) {
-		// 	dir.y += 1
-		// }
-
-		// if (dir.x !== 0 || dir.y !== 0) {
-		// 	this.vel = dir.normalize().scale(Config.playerSpeed)
-		// }
 	}
 }

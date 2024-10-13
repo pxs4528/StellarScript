@@ -16,9 +16,10 @@ Play now [here](https://excaliburjs.com/sample-shootemup)
 * Run `npm run build:dev` to produce javascript bundles for debugging in the `dist/` folder
 * Run `npm run build:prod` to produce javascript bundles for production (minified) in the `dist/` folder
 
-## Credits
+## ACKs
 
 i love u <3
 
-* https://axassets.itch.io/spaceship-simple-assets
-<!-- * https://github.com/ajaxorg/ace -->
+* [Code editor](https://github.com/ajaxorg/ace)
+* [Game engine](https://excaliburjs.com/)
+* [Spaceship assets](https://axassets.itch.io/spaceship-simple-assets)

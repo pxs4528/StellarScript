@@ -10,24 +10,28 @@ import Config from './config'
 
 const rootDiv = document.getElementById('rootDiv') as HTMLDivElement
 
-const TICK_MS = 500
+const TICK_MS = 50
 const ENGINE_LEFT = 0
 const ENGINE_RIGHT = 1
+const SENSOR_LEFT = 10
+const SENSOR_RIGHT = 11
 
 export class Sandbox extends ex.Scene {
 	random = new ex.Random(1337) // seeded random
 
 	deployedCode = `const ENGINE_LEFT = ${ENGINE_LEFT};
 const ENGINE_RIGHT = ${ENGINE_RIGHT};
+const SENSOR_LEFT = ${SENSOR_LEFT}
+const SENSOR_RIGHT = ${SENSOR_RIGHT}
 const LOW = 0;
 const HIGH = 1;
 
+// This function is called every cycle forever.
 function loop() {
 
 }`
 	isSimulating = false
 	sinceLastSimulationMs = 0
-	gpio = [0]
 	ship!: Ship
 	globals: Record<string, any> = {}
 
@@ -111,7 +115,6 @@ function loop() {
 
 	private async simulate() {
 		const globals = this.globals
-		const gpio = this.gpio
 		try {
 			this.isSimulating = true
 			await Function(`
@@ -136,15 +139,32 @@ function loop() {
 				g_set(name: string, value: any) {
 					globals[name] = value
 				},
-				read(id: number) {
-					return gpio[id]
+				read: (id: number) => {
+					switch (id) {
+						case ENGINE_LEFT:
+							return Number(this.ship.isLeftEngineOn)
+						case ENGINE_RIGHT:
+							return Number(this.ship.isRightEngineOn)
+						case SENSOR_LEFT:
+							return Number(this.ship.isLeftSensorTriggered)
+						case SENSOR_RIGHT:
+							return Number(this.ship.isRightSensorTriggered)
+						default:
+							return 0
+					}
 				},
 				write: (id: number, value: number) => {
-					gpio[id] = value
-					if (id === ENGINE_LEFT) {
-						this.ship.isLeftEngineOn = Boolean(value)
-					} else if (id === ENGINE_RIGHT) {
-						this.ship.isRightEngineOn = Boolean(value)
+					switch (id) {
+						case ENGINE_LEFT:
+							this.ship.isLeftEngineOn = Boolean(value)
+							break
+						case ENGINE_RIGHT:
+							this.ship.isRightEngineOn = Boolean(value)
+							break
+						case SENSOR_LEFT:
+						case SENSOR_RIGHT:
+						default:
+							break
 					}
 				},
 			})()
