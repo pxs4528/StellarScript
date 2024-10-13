@@ -20,6 +20,10 @@
   justify-content: end;
 }
 
+#sandbox-pause {
+  
+}
+
 #editor {
   position: absolute;
   width: 650px;

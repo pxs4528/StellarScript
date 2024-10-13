@@ -11,7 +11,7 @@ const Config = {
 	enemyFireInterval: 900,
 	enemyDamage: 10,
 	bulletSize: 5,
-	spawnTime: 6000,
+	spawnTime: 7000,
 	healthBarHeight: 25,
 	healthBarWidth: 400,
 	consoleWidth: 700,

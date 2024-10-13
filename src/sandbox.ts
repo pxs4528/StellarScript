@@ -24,7 +24,7 @@ export class Sandbox extends ex.Scene {
 		super()
 	}
 
-	onActivate() {
+	onActivate(context: ex.SceneActivationContext) {
 		// Create the code editor HTML setup when sandbox scene is activated
 		rootDiv.innerHTML = `
 			<section id="sandbox-editor">
@@ -41,6 +41,15 @@ export class Sandbox extends ex.Scene {
 
 		const pauseButton = document.getElementById('sandbox-pause') as HTMLButtonElement
 		const deployButton = document.getElementById('sandbox-deploy') as HTMLButtonElement
+		pauseButton.addEventListener('click', () => {
+			if (pauseButton.innerText === 'Pause') {
+				context.engine.stop()
+				pauseButton.innerText = 'Play'
+			} else {
+				context.engine.start()
+				pauseButton.innerText = 'Pause'
+			}
+		})
 		deployButton.addEventListener('click', () => {
 			const code = editor.getValue()
 			this.deployedCode = code
@@ -60,14 +69,6 @@ export class Sandbox extends ex.Scene {
 	}
 
 	private simulate() {
-		let isLefton = this.gpio[0]
-		let isRighton = this.gpio[1]
-		let newSprite = ex.Animation.fromSpriteSheet(
-			gameSheet,
-			[19],
-			100,
-			ex.AnimationStrategy.Loop,
-		)
 		const gpio = this.gpio
 		Function(`
 			'use strict'
@@ -77,45 +78,21 @@ export class Sandbox extends ex.Scene {
 		`).bind({
 			write(id: number, value: number) {
 				gpio[id] = value
-				if (id === 0){
-					if (value)
-						Config.currentStripe = 17;
-					else
-						Config.currentStripe = 19;
-				}
-				if (id === 1){
-					if (value)
-						Config.currentStripe = 18;
-					else
-						Config.currentStripe = 19;
-				}
 			},
 			read(id: number) {
 				return gpio[id]
 			},
 		})()
 
+		this.ship.isLeftEngineOn = Boolean(gpio[0])
+		this.ship.isRightEngineOn = Boolean(gpio[1])
 		this.ship.vel = ex.vec(0, gpio[0] ? -100 : 0)
-	}
-
-	onPostUpdate(_engine: ex.Engine, _delta: number): void {
-		// if paused stop the engine
-		const pauseButton = document.getElementById('sandbox-pause') as HTMLButtonElement
-		pauseButton.addEventListener('click', () => {
-			if (pauseButton.innerText === 'Pause') {
-				_engine.stop()
-				pauseButton.innerText = 'Play'
-			} else {
-				_engine.start()
-				pauseButton.innerText = 'Pause'
-			}
-		})
 	}
 
 	onInitialize(engine: ex.Engine) {
 		engine.add(animManager)
 
-		const ship = new Ship(engine.halfDrawWidth, 600, 80, 80)
+		const ship = new Ship(engine.halfDrawWidth, 500, 80, 80)
 		engine.add(ship)
 		this.ship = ship
 

@@ -25,6 +25,10 @@ export class Ship extends ex.Actor {
 	private flipBarrel = false
 	private throttleFire?: FireFunction
 	private explode?: ex.Animation
+
+	isLeftEngineOn = false
+	isRightEngineOn = false
+
 	constructor(x: number, y: number, width: number, height: number) {
 		super({
 			pos: new ex.Vector(x, y),
@@ -98,16 +102,15 @@ export class Ship extends ex.Actor {
 			this.kill()
 		}
 
-		if (Config.currentStripe == 17) {
-			const anim = ex.Animation.fromSpriteSheet(
-				gameSheet,
-				[17],
-				100,
-				ex.AnimationStrategy.Loop,
-			)
-			anim.scale = new ex.Vector(4, 4)
-			this.graphics.use(anim)		
-		}
+		const sprite = 16 + (!this.isLeftEngineOn ? 2 : 0) + (!this.isRightEngineOn ? 1 : 0)
+		const anim = ex.Animation.fromSpriteSheet(
+			gameSheet,
+			[sprite],
+			100,
+			ex.AnimationStrategy.Loop,
+		)
+		anim.scale = new ex.Vector(4, 4)
+		this.graphics.use(anim)		
 
 		// Keep player in the viewport
 		if (this.pos.x < 0) {
