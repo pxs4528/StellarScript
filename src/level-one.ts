@@ -18,7 +18,7 @@ const ENGINE_RIGHT = 1
 const SENSOR_LEFT = 10
 const SENSOR_RIGHT = 11
 
-export class Sandbox extends ex.Scene {
+export class LevelOne extends ex.Scene {
 	random = new ex.Random(1337) // seeded random
 
 	deployedCode = `const ENGINE_LEFT = ${ENGINE_LEFT};
@@ -42,7 +42,6 @@ function loop() {
 	}
 
 	onActivate(context: ex.SceneActivationContext) {
-		// Create the code editor HTML setup when sandbox scene is activated
 		rootDiv.innerHTML = `
 			<section id="sandbox-editor">
 				<button id="sandbox-collapse">Collapse</button>
@@ -51,7 +50,6 @@ function loop() {
 				<div id="editor">${this.deployedCode}</div>
 				<textarea id="output" readonly style="display: none"></textarea>
 				<footer>
-					<button id="sandbox-pause">Pause</button>
 					<button id="sandbox-deploy">Deploy</button>
 					<button id="sandbox-back">Back</button>
 				</footer>
@@ -61,7 +59,6 @@ function loop() {
 		editor.setTheme('ace/theme/github_dark')
 		editor.session.setMode('ace/mode/javascript')
 
-		const pauseButton = document.getElementById('sandbox-pause') as HTMLButtonElement
 		const deployButton = document.getElementById('sandbox-deploy') as HTMLButtonElement
 		const collapseButton = document.getElementById('sandbox-collapse') as HTMLButtonElement
 		const sandboxEditor = document.getElementById('editor') as HTMLDivElement
@@ -70,15 +67,6 @@ function loop() {
 		const output = document.getElementById('output') as HTMLTextAreaElement
 		const backButton = document.getElementById('sandbox-back') as HTMLButtonElement
 
-		pauseButton.addEventListener('click', () => {
-			if (pauseButton.innerText === 'Pause') {
-				context.engine.stop()
-				pauseButton.innerText = 'Play'
-			} else {
-				context.engine.start()
-				pauseButton.innerText = 'Pause'
-			}
-		})
 		deployButton.addEventListener('click', () => {
 			const code = editor.getValue()
 			this.deployedCode = code
@@ -235,23 +223,5 @@ function loop() {
 		const ship = new Ship(engine.halfDrawWidth, 900, 80, 80)
 		engine.add(ship)
 		this.ship = ship
-
-		let asteroidTimer = new ex.Timer({
-			fcn: () => {
-				var asteroid = new Asteroid(
-					this.random.floating(this.camera.viewport.left, this.camera.viewport.right),
-					-100,
-					80,
-					80,
-				)
-				engine.add(asteroid)
-			},
-			interval: Config.spawnTime,
-			repeats: true,
-			numberOfRepeats: -1,
-		})
-
-		engine.addTimer(asteroidTimer)
-		asteroidTimer.start()
 	}
 }

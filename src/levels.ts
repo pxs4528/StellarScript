@@ -1,9 +1,8 @@
 import * as ex from 'excalibur'
 import Config from './config'
-import { Levels } from './levels'
 
 const rootDiv = document.getElementById('rootDiv') as HTMLDivElement
-export class MainMenu extends ex.Scene {
+export class Levels extends ex.Scene {
 	constructor() {
 		super()
 	}
@@ -16,8 +15,8 @@ export class MainMenu extends ex.Scene {
         <div>
             <h1 id="h1-SS">StellarScript</h1>
             <div class="gap">
-            <button id="sandbox-button">Sandbox</button>
-            <button id="level-select">Level Select</button>
+            <button id="level-one">Level 1</button>
+            <button id="level-two">Level Two</button>
             <div class="final">
               <button id="go-fullscreen">Go Fullscreen</button>
     <button id="toggle-physics">Physics : Simple</button>
@@ -29,13 +28,16 @@ export class MainMenu extends ex.Scene {
     </footer>
             </section>
         `
-		const sandboxButton = document.getElementById('sandbox-button') as HTMLButtonElement
-		sandboxButton.onclick = () => {
-			this.engine.goToScene('sandbox')
-		}
-		const goFullscreenButton = document.getElementById('go-fullscreen') as HTMLButtonElement
+		const levelOne = document.getElementById('level-one') as HTMLButtonElement
+        levelOne.onclick = () => {
+            context.engine.goToScene('level-one')
+        }
 
-		goFullscreenButton.addEventListener('click', () => {
+		
+		const levelTwo = document.getElementById('level-two') as HTMLButtonElement
+
+		const goFullscreenButton = document.getElementById('go-fullscreen') as HTMLButtonElement
+        goFullscreenButton.addEventListener('click', () => {
 			if (document.documentElement.requestFullscreen) {
 				document.documentElement.requestFullscreen()
 			}
@@ -45,12 +47,6 @@ export class MainMenu extends ex.Scene {
         togglePhysicsButton.onclick = () => {
             Config.physicsMode = Config.physicsMode === 'simple' ? 'advanced' : 'simple'
             togglePhysicsButton.innerText = `Physics : ${Config.physicsMode}`
-        }
-
-        const levelSelectButton = document.getElementById('level-select') as HTMLButtonElement
-
-        levelSelectButton.onclick = () => {
-            context.engine.goToScene('levels')
         }
 	}
 

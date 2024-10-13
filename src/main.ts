@@ -6,6 +6,8 @@ import { Images, loader, Sounds } from './resources'
 import { Sandbox } from './sandbox'
 import './index.css'
 import { MainMenu } from './menu'
+import { Levels } from './levels'
+import { LevelOne } from './level-one'
 
 const gameCanvas = document.getElementById('gameCanvas') as HTMLCanvasElement
 const rootDiv = document.getElementById('rootDiv') as HTMLDivElement
@@ -63,7 +65,9 @@ if (!Images.backgroundImage) {
 	// Add the background actor to the engine
 	engine.add(backgroundActor)
 }
+engine.add('level-one', new LevelOne())
 engine.add('game', new Game())
+engine.add('levels', new Levels())
 engine.add('mainmenu', new MainMenu())
 engine.add('sandbox', new Sandbox())
 engine.goToScene('mainmenu')
