@@ -114,13 +114,13 @@ export class Ship extends ex.Actor {
 	}
 
 	onPostUpdate(engine: ex.Engine, delta: number) {
-		if (stats.hp <= 0 && this.explode) {
-			// update game to display game over
-			// gameOver = true;
-			animManager.play(this.explode, this.pos)
-			Sounds.explodeSound.play()
-			this.kill()
-		}
+		// if (stats.hp <= 0 && this.explode) {
+		// 	// update game to display game over
+		// 	// gameOver = true;
+		// 	animManager.play(this.explode, this.pos)
+		// 	Sounds.explodeSound.play()
+		// 	this.kill()
+		// }
 
 		// Update sprite based on engines
 		const sprite = 16 + (!this.isLeftEngineOn ? 2 : 0) + (!this.isRightEngineOn ? 1 : 0)
@@ -139,13 +139,13 @@ export class Ship extends ex.Actor {
 			this.pos.add(up.scale(32)).add(ex.Vector.Left.scale(64).rotate(this.body.rotation)),
 			up,
 		)
-		const leftHits = this.scene.physics.rayCast(leftRay, { collisionGroup: Asteroid.group })
+		const leftHits = this.scene.physics.rayCast(leftRay)
 		this.isLeftSensorTriggered = !!leftHits.length
 		const rightRay = new ex.Ray(
 			this.pos.add(up.scale(32)).add(ex.Vector.Right.scale(64).rotate(this.body.rotation)),
 			up,
 		)
-		const rightHits = this.scene.physics.rayCast(rightRay, { collisionGroup: Asteroid.group })
+		const rightHits = this.scene.physics.rayCast(rightRay)
 		this.isRightSensorTriggered = !!rightHits.length
 
 		// Fire bullet if needed

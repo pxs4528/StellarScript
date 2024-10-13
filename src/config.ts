@@ -1,13 +1,13 @@
 // configuration
 
 const Config = {
-	playerSpeedPerEngine: 300,
+	playerSpeedPerEngine: 200,
 	physicsMode: 'simple',
 	backgroundTileCount: 128,
 	backgroundTileSize: 600,
 	playerBulletVelocity: 600,
 	playerFireThrottle: 500,
-	enemySpawnRadius: 800,
+	enemySpawnRadius: 1500,
 	spawnTime: 100,
 
 	soundVolume: .1,
