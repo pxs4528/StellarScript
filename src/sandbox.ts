@@ -15,8 +15,9 @@ const rootDiv = document.getElementById('rootDiv') as HTMLDivElement
 const TICK_MS = 100
 const ENGINE_LEFT = 0
 const ENGINE_RIGHT = 1
-const SENSOR_LEFT = 10
-const SENSOR_RIGHT = 11
+const SENSOR_LEFT = 2
+const SENSOR_RIGHT = 3
+const WEAPON = 4
 
 export class Sandbox extends ex.Scene {
 	random = new ex.Random(1337) // seeded random
@@ -25,6 +26,7 @@ export class Sandbox extends ex.Scene {
 const ENGINE_RIGHT = ${ENGINE_RIGHT};
 const SENSOR_LEFT = ${SENSOR_LEFT};
 const SENSOR_RIGHT = ${SENSOR_RIGHT};
+const WEAPON = ${WEAPON};
 const LOW = 0;
 const HIGH = 1;
 
@@ -119,7 +121,7 @@ function loop() {
 			}
 		})
 		backButton.addEventListener('click', () => {
-			context.engine.goToScene('mainMenu')
+			context.engine.goToScene('mainmenu')
 		})
 	}
 
@@ -181,6 +183,7 @@ function loop() {
 							return Number(this.ship.isLeftSensorTriggered)
 						case SENSOR_RIGHT:
 							return Number(this.ship.isRightSensorTriggered)
+						case WEAPON:
 						default:
 							return 0
 					}
@@ -192,6 +195,9 @@ function loop() {
 							break
 						case ENGINE_RIGHT:
 							this.ship.isRightEngineOn = Boolean(value)
+							break
+						case WEAPON:
+							this.ship.shouldFireBullet = Boolean(value)
 							break
 						case SENSOR_LEFT:
 						case SENSOR_RIGHT:

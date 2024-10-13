@@ -4,10 +4,10 @@ const Config = {
 	playerSpeedPerEngine: 300,
 	physicsMode: 'simple',
 	backgroundTileSize: 600,
+	playerBulletVelocity: 600,
+	playerFireThrottle: 500,
 
 	soundVolume: .1,
-	playerBulletVelocity: -600,
-	playerFireThrottle: 200,
 	missileSpeed: -400,
 	enemyBulletVelocity: -300,
 	enemySpeed: 200,

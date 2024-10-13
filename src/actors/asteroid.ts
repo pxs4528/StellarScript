@@ -63,12 +63,12 @@ export class Asteroid extends ex.Actor {
 	}
 	onPostUpdate(engine: ex.Engine, delta: number) {
 		// Keep asteroid within game bounds
-		if (this.pos.x < 0 || this.pos.x > engine.drawWidth) {
-			this.vel.x *= -1
-		}
-		if (this.pos.y < 0 || this.pos.y > engine.drawHeight) {
-			this.vel.y *= -1
-		}
+		// if (this.pos.x < 0 || this.pos.x > engine.drawWidth) {
+		// this.vel.x *= -1
+		// }
+		// if (this.pos.y < 0 || this.pos.y > engine.drawHeight) {
+		// this.vel.y *= -1
+		// }
 	}
 
 	private onPreCollision(evt: ex.PreCollisionEvent) {

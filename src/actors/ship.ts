@@ -31,6 +31,7 @@ export class Ship extends ex.Actor {
 	isRightEngineOn = false
 	isLeftSensorTriggered = false
 	isRightSensorTriggered = false
+	shouldFireBullet = false
 
 	constructor(x: number, y: number, width: number, height: number) {
 		super({
@@ -88,14 +89,22 @@ export class Ship extends ex.Actor {
 		// Change angular velocity based on engines
 		if (this.isLeftEngineOn && !this.isRightEngineOn) {
 			// Rotate to the right
-			// this.body.angularVelocity += Math.PI / (delta * 32)
-			this.body.angularVelocity = Math.PI / (delta / 2)
+			if (Config.physicsMode === 'simple') {
+				this.body.angularVelocity = Math.PI / (delta / 2)
+			} else {
+				this.body.angularVelocity += Math.PI / (delta * 32)
+			}
 		} else if (!this.isLeftEngineOn && this.isRightEngineOn) {
 			// Rotate to the left
-			// this.body.angularVelocity -= Math.PI / (delta * 32)
-			this.body.angularVelocity = Math.PI / (delta / 2)
+			if (Config.physicsMode === 'simple') {
+				this.body.angularVelocity = -Math.PI / (delta / 2)
+			} else {
+				this.body.angularVelocity -= Math.PI / (delta * 32)
+			}
 		} else {
-			this.body.angularVelocity = 0
+			if (Config.physicsMode === 'simple') {
+				this.body.angularVelocity = 0
+			}
 		}
 
 		// Change velocity based on engines
@@ -138,14 +147,21 @@ export class Ship extends ex.Actor {
 		)
 		const rightHits = this.scene.physics.rayCast(rightRay, { collisionGroup: Asteroid.group })
 		this.isRightSensorTriggered = !!rightHits.length
+
+		// Fire bullet if needed
+		if (this.shouldFireBullet) {
+			this.shouldFireBullet = false
+			this.throttleFire ? this.throttleFire(engine) : null
+		}
 	}
 
 	private fire = (engine: ex.Engine) => {
-		let bullet = new Bullet(
-			this.pos.x + (this.flipBarrel ? -40 : 40),
-			this.pos.y - 20,
+		const pos = this.pos.add(ex.vec(0, -48).rotate(this.rotation))
+		const bullet = new Bullet(
+			pos.x,
+			pos.y,
 			0,
-			Config.playerBulletVelocity,
+			-Config.playerBulletVelocity,
 			Ship.group,
 		)
 		this.flipBarrel = !this.flipBarrel

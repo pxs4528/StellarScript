@@ -9,45 +9,25 @@ export class Levels extends ex.Scene {
 
 	onActivate(context: ex.SceneActivationContext) {
 		rootDiv.innerHTML = `
-            <section id="main-menu">
-               <div class="container">
-        <div class="gap">
-        <div>
-            <h1 id="h1-SS">StellarScript</h1>
+         <section id="main-menu">
+            <div class="container">
             <div class="gap">
-            <button id="level-one">Level 1</button>
-            <button id="level-two">Level Two</button>
-            <div class="final">
-              <button id="go-fullscreen">Go Fullscreen</button>
-    <button id="toggle-physics">Physics : Simple</button>
+               <div>
+                   <h1 id="h1-SS">StellarScript</h1>
+                   <div class="gap">
+                       <button id="level-one">Level 1</button>
+                       <button id="level-two">Level Two</button>
+                   </div>
+               </div>
             </div>
-            </div>
-        </div>
-    </div>
-    <footer>
-    </footer>
-            </section>
+         </section>
         `
 		const levelOne = document.getElementById('level-one') as HTMLButtonElement
-        levelOne.onclick = () => {
-            context.engine.goToScene('level-one')
-        }
+		levelOne.onclick = () => {
+			context.engine.goToScene('level-one')
+		}
 
-		
 		const levelTwo = document.getElementById('level-two') as HTMLButtonElement
-
-		const goFullscreenButton = document.getElementById('go-fullscreen') as HTMLButtonElement
-        goFullscreenButton.addEventListener('click', () => {
-			if (document.documentElement.requestFullscreen) {
-				document.documentElement.requestFullscreen()
-			}
-		})
-
-        const togglePhysicsButton = document.getElementById('toggle-physics') as HTMLButtonElement
-        togglePhysicsButton.onclick = () => {
-            Config.physicsMode = Config.physicsMode === 'simple' ? 'advanced' : 'simple'
-            togglePhysicsButton.innerText = `Physics : ${Config.physicsMode}`
-        }
 	}
 
 	onDeactivate(_context: ex.SceneActivationContext): void {

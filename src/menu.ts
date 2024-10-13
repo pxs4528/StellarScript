@@ -10,23 +10,14 @@ export class MainMenu extends ex.Scene {
 
 	onActivate(context: ex.SceneActivationContext) {
 		rootDiv.innerHTML = `
-            <section id="main-menu">
-               <div class="container">
-        <div class="gap">
-        <div>
-            <h1 id="h1-SS">StellarScript</h1>
-            <div class="gap">
-            <button id="sandbox-button">Sandbox</button>
-            <button id="level-select">Level Select</button>
-            <div class="final">
-              <button id="go-fullscreen">Go Fullscreen</button>
-    <button id="toggle-physics">Physics : Simple</button>
-            </div>
-            </div>
-        </div>
-    </div>
-    <footer>
-    </footer>
+            <section id="main-menu" class="w-full flex flex-row gap-4">
+                <h1 id="h1-SS">StellarScript</h1>
+                <button id="level-select" class="button blue">Levels</button>
+                <button id="sandbox-button" class="button blue">Sandbox</button>
+                <div class="flex flex-row gap-4 justify-stretch w-60">
+                    <button id="go-fullscreen" class="button yellow">Fullscreen</button>
+                    <button id="toggle-physics" class="button yellow">Physics: simple</button>
+                </div>
             </section>
         `
 		const sandboxButton = document.getElementById('sandbox-button') as HTMLButtonElement
@@ -36,22 +27,24 @@ export class MainMenu extends ex.Scene {
 		const goFullscreenButton = document.getElementById('go-fullscreen') as HTMLButtonElement
 
 		goFullscreenButton.addEventListener('click', () => {
-			if (document.documentElement.requestFullscreen) {
+			if (document.fullscreenElement) {
+				document.exitFullscreen()
+			} else {
 				document.documentElement.requestFullscreen()
 			}
 		})
 
-        const togglePhysicsButton = document.getElementById('toggle-physics') as HTMLButtonElement
-        togglePhysicsButton.onclick = () => {
-            Config.physicsMode = Config.physicsMode === 'simple' ? 'advanced' : 'simple'
-            togglePhysicsButton.innerText = `Physics : ${Config.physicsMode}`
-        }
+		const togglePhysicsButton = document.getElementById('toggle-physics') as HTMLButtonElement
+		togglePhysicsButton.onclick = () => {
+			Config.physicsMode = Config.physicsMode === 'simple' ? 'advanced' : 'simple'
+			togglePhysicsButton.innerText = `Physics: ${Config.physicsMode}`
+		}
 
-        const levelSelectButton = document.getElementById('level-select') as HTMLButtonElement
+		const levelSelectButton = document.getElementById('level-select') as HTMLButtonElement
 
-        levelSelectButton.onclick = () => {
-            context.engine.goToScene('levels')
-        }
+		levelSelectButton.onclick = () => {
+			context.engine.goToScene('levels')
+		}
 	}
 
 	onDeactivate(_context: ex.SceneActivationContext): void {

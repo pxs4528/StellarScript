@@ -107,7 +107,7 @@ function loop() {
 			}
 		})
 		backButton.addEventListener('click', () => {
-			context.engine.goToScene('mainMenu')
+			context.engine.goToScene('mainmenu')
 		})
 	}
 
