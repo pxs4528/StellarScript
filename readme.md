@@ -1,8 +1,8 @@
-# Excalibur Shoot'em Up Sample
+# Stellar Script
 
 Play now [here](https://excaliburjs.com/sample-shootemup)
 
-![example of shootem up running](./shmup.gif)
+![example of shootem up running](./demo.mp4)
 ## Running locally
 
 * Using [nodejs](https://nodejs.org/en/) and [npm](https://www.npmjs.com/)
