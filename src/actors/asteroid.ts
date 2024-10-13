@@ -50,16 +50,17 @@ export class Asteroid extends ex.Actor {
 
 		// Setup patrolling behavior
 		const angle = Math.random() * Math.PI * 2
+		const multiplier = Math.random() * 2
 		this.vel = new ex.Vector(
-			Math.cos(angle) * Config.enemySpeed,
-			Math.sin(angle) * Config.enemySpeed,
+			Math.cos(angle) * Config.enemySpeed * multiplier,
+			Math.sin(angle) * Config.enemySpeed * multiplier,
 		)
-		this.actions.repeatForever(ctx =>
-			ctx.moveTo(this.pos.x, this.pos.y + 800, Config.enemySpeed)
-				.moveTo(this.pos.x + 800, this.pos.y, Config.enemySpeed)
-				.moveTo(this.pos.x + 800, this.pos.y + 800, Config.enemySpeed)
-				.moveTo(this.pos.x, this.pos.y, Config.enemySpeed)
-		)
+		// this.actions.repeatForever(ctx =>
+		// 	ctx.moveTo(this.pos.x, this.pos.y + 800, Config.enemySpeed)
+		// 		.moveTo(this.pos.x + 800, this.pos.y, Config.enemySpeed)
+		// 		.moveTo(this.pos.x + 800, this.pos.y + 800, Config.enemySpeed)
+		// 		.moveTo(this.pos.x, this.pos.y, Config.enemySpeed)
+		// )
 	}
 	onPostUpdate(engine: ex.Engine, delta: number) {
 		// Keep asteroid within game bounds

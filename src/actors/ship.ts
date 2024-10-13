@@ -69,16 +69,16 @@ export class Ship extends ex.Actor {
 	}
 
 	onPreCollision(evt: ex.PreCollisionEvent) {
-		if (evt.other instanceof Baddie || ex.Util.contains(Baddie.Bullets, evt.other)) {
-			Sounds.hitSound.play()
-			this.actions.blink(300, 300, 3)
-			stats.hp -= Config.enemyDamage
-			if (stats.hp <= 0) {
-				stats.gameOver = true
-				this.kill()
-				this.stopRegisteringFireThrottleEvent()
-			}
-		}
+		// if (evt.other instanceof Baddie || ex.Util.contains(Baddie.Bullets, evt.other)) {
+		// 	Sounds.hitSound.play()
+		// 	this.actions.blink(300, 300, 3)
+		// 	stats.hp -= Config.enemyDamage
+		// 	if (stats.hp <= 0) {
+		// 		stats.gameOver = true
+		// 		this.kill()
+		// 		this.stopRegisteringFireThrottleEvent()
+		// 	}
+		// }
 	}
 
 	private stopRegisteringFireThrottleEvent = () => {

@@ -245,8 +245,14 @@ function loop() {
 		let asteroidTimer = new ex.Timer({
 			fcn: () => {
 				var asteroid = new Asteroid(
-					this.random.floating(this.camera.viewport.left, this.camera.viewport.right),
-					-100,
+					this.random.floating(
+						this.ship.pos.x - Config.enemySpawnRadius,
+						this.ship.pos.x + Config.enemySpawnRadius,
+					),
+					this.random.floating(
+						this.ship.pos.y - Config.enemySpawnRadius,
+						this.ship.pos.y + Config.enemySpawnRadius,
+					),
 					80,
 					80,
 				)
