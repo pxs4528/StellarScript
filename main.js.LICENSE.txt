@@ -1,0 +1,15 @@
+/*
+ * based on code from:
+ *
+ * @license RequireJS text 0.25.0 Copyright (c) 2010-2011, The Dojo Foundation All Rights Reserved.
+ * Available via the MIT or new BSD license.
+ * see: http://github.com/jrburke/requirejs for details
+ */
+
+/*!
+ * excalibur - 0.28.0 - 2023-8-10
+ * https://github.com/excaliburjs/Excalibur
+ * Copyright (c) 2023 Excalibur.js <https://github.com/excaliburjs/Excalibur/graphs/contributors>
+ * Licensed BSD-2-Clause
+ * @preserve
+ */
