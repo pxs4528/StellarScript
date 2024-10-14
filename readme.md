@@ -2,7 +2,10 @@
 
 Play now [here](https://excaliburjs.com/sample-shootemup)
 
-![example of shootem up running](./demo.mp4)
+
+https://github.com/user-attachments/assets/b91fcf28-c7f6-43cf-a48f-2de893e93aa7
+
+
 ## Running locally
 
 * Using [nodejs](https://nodejs.org/en/) and [npm](https://www.npmjs.com/)
