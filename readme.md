@@ -1,9 +1,9 @@
 # Stellar Script
 
-Play now [here](https://excaliburjs.com/sample-shootemup)
+Play now [here](https://stellarscript.study/)
 
 
-https://github.com/user-attachments/assets/b91fcf28-c7f6-43cf-a48f-2de893e93aa7
+https://github.com/user-attachments/assets/ba8170c5-1d7d-463d-a49d-1d315098f631
 
 
 ## Running locally
@@ -20,9 +20,6 @@ https://github.com/user-attachments/assets/b91fcf28-c7f6-43cf-a48f-2de893e93aa7
 * Run `npm run build:prod` to produce javascript bundles for production (minified) in the `dist/` folder
 
 ## ACKs
-
-i love u <3
-
 * [Code editor](https://github.com/ajaxorg/ace)
 * [Game engine](https://excaliburjs.com/)
 * [Spaceship assets](https://axassets.itch.io/spaceship-simple-assets)
