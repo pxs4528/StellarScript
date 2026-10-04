@@ -1,14 +1,35 @@
-# Stellar Script
+# stellr.dev
 
-Play now [here](https://stellarscript.study/)
+A roguelike where you program the ship instead of steering it. Play now [here](https://stellr.dev/)
 
 
 https://github.com/user-attachments/assets/ba8170c5-1d7d-463d-a49d-1d315098f631
 
 
-### StellarScript Global Function References
+## A run
 
-* `delay(milliseconds: number): void`: delay the execution by milliseconds.
+Pick **New Run** on the menu. A run is a chain of star systems, and each system has three encounters: an asteroid field, an enemy patrol, and a boss with a rule that breaks your script.
+
+* **Hangar.** Between encounters you edit your script and spend credits. You cannot edit code once you launch.
+* **Salvage.** Each encounter has a salvage target. Asteroids are worth 10, drones 25 and the boss 80, times your multiplier. Clear the target before the hull or the fuel runs out. Ramming things destroys them but earns nothing.
+* **Jokers.** Up to five. Most reward how you code: Code Golf, Pure Function, Rubber Duck, Off By One, Technical Debt, Race Condition, Garbage Collector, Hot Path.
+* **Hardware.** Upgrade levels for sensors, cannon, thrusters, gyros and clock speed. Rarer parts add new pins: a radar and a shield.
+
+In a run the pin names are already defined, so a script is just `loop()`.
+
+| Pin | Use |
+| --- | --- |
+| `ENGINE_LEFT`, `ENGINE_RIGHT` | `write` HIGH or LOW. One engine turns the ship, both fly straight. |
+| `SENSOR_LEFT`, `SENSOR_RIGHT` | `read` 1 when something is ahead on that side. |
+| `WEAPON` | `write` HIGH to fire. |
+| `RADAR_BEARING`, `RADAR_DISTANCE` | Needs the radar. Degrees to the nearest contact (negative is left) and its distance, or -1. |
+| `SHIELD` | Needs the shield. `write` HIGH to block damage while burning extra fuel. |
+
+All art added for run mode is placeholder, see `res/placeholder/README.md`.
+
+### Global Function References
+
+* `delay(ticks: number): void`: pause the script for that many ticks (a tick is 100 ms before upgrades).
 * `g_has(name: string): boolean`: check if a global variable named `name` exists.
 * `g_get(name: string): any`: get the value of the global variable named `name`.
 * `g_set(name: string, value: any): void`: set the value of the global variable named `name` to `value`. Global variables persist through different executions of the `loop()` function.
@@ -19,9 +40,9 @@ https://github.com/user-attachments/assets/ba8170c5-1d7d-463d-a49d-1d315098f631
 
 ## Try it Out
 
-The game is deployed at [https://stellarscript.study](https://stellarscript.study). Only "Sandbox" mode is implemented at the time of writing this post.
+The game is deployed at [https://stellr.dev](https://stellr.dev).
 
-This is some sample code you can copy paste to understand how certain functions work
+This is some sample code you can copy paste into Sandbox mode to understand how certain functions work
 ```javascript
 const ENGINE_LEFT = 0;
 const ENGINE_RIGHT = 1;
@@ -68,7 +89,7 @@ function loop() {
 * Run the `npm install` to install dependencies
 * Run the `npm run dev` to run the development server to test out changes
    * [Webpack](https://webpack.js.org/) will build the [typescript](https://www.typescriptlang.org/) into javascript
-   * [Webpack dev server](https://webpack.js.org/configuration/dev-server/) will host the script in a little server on http://localhost:8082/
+   * [Webpack dev server](https://webpack.js.org/configuration/dev-server/) will host the script in a little server on http://localhost:9000/
 
 ## Building bundles
 

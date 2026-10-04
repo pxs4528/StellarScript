@@ -1,9 +1,9 @@
 {
-  "name": "@excaliburjs/sample-shootemup",
+  "name": "stellr.dev",
   "private": true,
   "version": "0.1.0",
-  "description": "Sample Excalibur.js shoot 'em up game",
-  "homepage": "https://github.com/excaliburjs/sample-shootemup",
+  "description": "A roguelike where you program the ship instead of steering it",
+  "homepage": "https://stellr.dev",
   "scripts": {
     "build:prod": "webpack --mode production",
     "build:dev": "webpack --mode development",
@@ -26,10 +26,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/excaliburjs/sample-shootemup.git"
+    "url": "https://github.com/stellr-dev/stellr.dev.git"
   },
   "bugs": {
-    "url": "https://github.com/excaliburjs/sample-shootemup/issues"
+    "url": "https://github.com/stellr-dev/stellr.dev/issues"
   },
   "dependencies": {
     "ace-builds": "^1.36.2",

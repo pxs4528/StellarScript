@@ -1,0 +1,340 @@
+/* Run mode: hangar and encounter HUD. Sizes are in em so they scale with the canvas. */
+#hud,
+#hangar {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  font-family: 'Press Start 2P', monospace;
+  font-size: min(1.25vw, 1.8vh);
+  color: #e8e6f0;
+}
+
+#hud *,
+#hangar * {
+  box-sizing: border-box;
+}
+
+.px-icon {
+  width: 3.2em;
+  height: 3.2em;
+  image-rendering: pixelated;
+  flex: none;
+}
+
+.run-button {
+  border-radius: 0;
+  padding: 0.5em 1em;
+  font-family: inherit;
+  font-size: 1em;
+  color: #000000;
+  cursor: pointer;
+}
+
+.run-button:hover:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.run-button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.run-button.green {
+  background-color: #0fb647;
+  border: 3px solid #032c13;
+}
+
+.run-button.yellow {
+  background-color: #ffcc00;
+  border: 3px solid #ff6600;
+}
+
+.run-button.red {
+  background-color: #ce3434;
+  border: 3px solid #9c0000;
+}
+
+.run-button.blue {
+  background-color: #4469e0;
+  border: 3px solid #7279b8;
+}
+
+#new-run {
+  border-radius: 0;
+  width: 60%;
+}
+
+/* ---- Encounter HUD ---- */
+
+#hud {
+  pointer-events: none;
+  padding: 1em;
+}
+
+#hud button {
+  pointer-events: auto;
+}
+
+.hud-top {
+  display: flex;
+  gap: 1em;
+}
+
+.hud-box {
+  flex: 1;
+  background-color: rgba(10, 8, 24, 0.8);
+  border: 3px solid #4a3f78;
+  padding: 0.6em 0.8em;
+}
+
+.hud-box.hud-wide {
+  flex: 2;
+}
+
+.hud-box label {
+  display: block;
+  margin-bottom: 0.5em;
+  color: #b9b2d8;
+}
+
+.hud-big {
+  font-size: 1.6em;
+  color: #ff5a5a;
+}
+
+.hud-bar {
+  height: 1em;
+  background-color: #1d1a2e;
+  border: 2px solid #000000;
+}
+
+.hud-bar i {
+  display: block;
+  height: 100%;
+  width: 0;
+}
+
+.hud-bar i.salvage {
+  background-color: #ffcc00;
+}
+
+.hud-bar i.hull {
+  background-color: #ce3434;
+}
+
+.hud-bar i.fuel {
+  background-color: #4469e0;
+}
+
+#hud-title {
+  margin-top: 0.8em;
+  color: #b9b2d8;
+}
+
+#hud-rule {
+  margin-top: 0.6em;
+  color: #ff5a5a;
+}
+
+#hud-jokers {
+  display: flex;
+  gap: 0.5em;
+  margin-top: 0.8em;
+}
+
+#hud-output {
+  position: absolute;
+  left: 1em;
+  bottom: 1em;
+  width: 45%;
+  margin: 0;
+  padding: 0.6em;
+  font-family: monospace;
+  font-size: 1.1em;
+  white-space: pre-wrap;
+  background-color: rgba(10, 8, 24, 0.8);
+  border: 3px solid #4a3f78;
+}
+
+#hud-abandon {
+  position: absolute;
+  right: 1em;
+  bottom: 1em;
+}
+
+#hud-overlay {
+  position: absolute;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  pointer-events: auto;
+}
+
+.hud-panel {
+  min-width: 40%;
+  padding: 2em;
+  text-align: center;
+  background-color: #14102a;
+  border: 4px solid #6e1ca5;
+}
+
+.hud-panel h2 {
+  margin: 0 0 1em;
+  color: #ffcc00;
+}
+
+.hud-panel table {
+  margin: 1em auto;
+  border-spacing: 1.5em 0.5em;
+  text-align: left;
+}
+
+.hud-panel td:last-child {
+  text-align: right;
+}
+
+.hud-panel tr.total td {
+  padding-top: 0.5em;
+  color: #ffcc00;
+}
+
+/* ---- Hangar ---- */
+
+#hangar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8em;
+  padding: 1em;
+  background-color: rgba(10, 8, 24, 0.92);
+  overflow: hidden;
+}
+
+#hangar h2 {
+  margin: 0 0 0.4em;
+  font-size: 1.8em;
+  color: #6e1ca5;
+}
+
+#hangar h3 {
+  margin: 0.8em 0 0.4em;
+  color: #b9b2d8;
+}
+
+#hangar-next {
+  color: #ffcc00;
+}
+
+#hangar-rule {
+  margin-top: 0.5em;
+  color: #ff5a5a;
+}
+
+.hangar-cols {
+  display: flex;
+  flex: 1;
+  gap: 1em;
+  min-height: 0;
+}
+
+.hangar-code {
+  display: flex;
+  flex: 1.2;
+  flex-direction: column;
+  gap: 0.5em;
+  min-width: 0;
+}
+
+#hangar #editor {
+  flex: 1;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  font-size: max(12px, 1.1em);
+}
+
+#hangar-lines {
+  color: #b9b2d8;
+}
+
+#hangar-pins {
+  padding: 0.6em;
+  font-size: 0.8em;
+  line-height: 1.7;
+  border: 3px solid #4a3f78;
+}
+
+#hangar-pins code {
+  color: #7fd4ff;
+}
+
+.hangar-side {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+  padding-right: 0.4em;
+}
+
+#hangar-stats {
+  display: flex;
+  justify-content: space-between;
+}
+
+#hangar-stats .credits {
+  color: #ffcc00;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  margin-bottom: 0.5em;
+  padding: 0.5em;
+  background-color: #14102a;
+  border: 3px solid #4a3f78;
+}
+
+.card.sold {
+  opacity: 0.4;
+}
+
+.card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.4em;
+  min-width: 0;
+}
+
+.card-body strong {
+  color: #ffffff;
+}
+
+.card-body span {
+  font-family: monospace;
+  font-size: 1.1em;
+  color: #b9b2d8;
+}
+
+.card .run-button {
+  flex: none;
+  font-size: 0.8em;
+}
+
+#hangar .empty,
+#owned-hardware p {
+  margin: 0;
+  font-family: monospace;
+  font-size: 1.1em;
+  color: #b9b2d8;
+}
+
+#hangar footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+#hangar-launch {
+  font-size: 1.4em;
+}

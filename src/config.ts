@@ -2,6 +2,10 @@
 
 const Config = {
 	playerSpeedPerEngine: 200,
+	// Radians per second, and per second squared in advanced physics.
+	// These match what the old per-frame formulas gave at 60 fps.
+	playerTurnRate: 0.377,
+	playerTurnAccel: 0.354,
 	physicsMode: 'simple',
 	backgroundTileCount: 128,
 	backgroundTileSize: 600,

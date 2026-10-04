@@ -6,8 +6,7 @@ import { Images, loader, Sounds } from './resources'
 import { Sandbox } from './sandbox'
 import './index.css'
 import { MainMenu } from './menu'
-import { Levels } from './levels'
-import { LevelOne } from './level-one'
+import { HangarScene } from './run/hangar-scene'
 
 const gameCanvas = document.getElementById('gameCanvas') as HTMLCanvasElement
 const rootDiv = document.getElementById('rootDiv') as HTMLDivElement
@@ -44,30 +43,8 @@ engine.setAntialiasing(false)
 
 // Setup game scene
 
-if (!Images.backgroundImage) {
-	console.error('Background image not loaded')
-} else {
-	const backgroundSprite = Images.backgroundImage.toSprite()
-	backgroundSprite.destSize.width = engine.screen.resolution.width
-	backgroundSprite.destSize.height = engine.screen.resolution.height
-
-	// Create an actor for the background
-	const backgroundActor = new ex.Actor({
-		x: engine.screen.resolution.width / 2,
-		y: engine.screen.resolution.height / 2,
-		width: engine.screen.resolution.width,
-		height: engine.screen.resolution.height,
-	})
-	backgroundActor.z = -99
-	backgroundActor.graphics.anchor = ex.Vector.Zero
-	backgroundActor.graphics.use(backgroundSprite)
-
-	// Add the background actor to the engine
-	engine.add(backgroundActor)
-}
-engine.add('level-one', new LevelOne())
 engine.add('game', new Game())
-engine.add('levels', new Levels())
+engine.add('hangar', new HangarScene())
 engine.add('mainmenu', new MainMenu())
 engine.add('sandbox', new Sandbox())
 engine.goToScene('mainmenu')

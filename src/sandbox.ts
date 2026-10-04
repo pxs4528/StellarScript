@@ -7,15 +7,11 @@ import { Asteroid } from './actors/asteroid'
 import { Ship } from './actors/ship'
 import Config from './config'
 import { Images } from './resources'
+import { Pins, ScriptRunner } from './script-runner'
 
 const rootDiv = document.getElementById('rootDiv') as HTMLDivElement
 
-const TICK_MS = 100
-const ENGINE_LEFT = 0
-const ENGINE_RIGHT = 1
-const SENSOR_LEFT = 2
-const SENSOR_RIGHT = 3
-const WEAPON = 4
+const { ENGINE_LEFT, ENGINE_RIGHT, SENSOR_LEFT, SENSOR_RIGHT, WEAPON } = Pins
 
 export class Sandbox extends ex.Scene {
 	random = new ex.Random(1337) // seeded random
@@ -32,10 +28,42 @@ const HIGH = 1;
 function loop() {
 
 }`
-	isSimulating = false
-	sinceLastSimulationMs = 0
 	ship!: Ship
-	globals: Record<string, any> = {}
+	runner = new ScriptRunner({
+		read: (id) => {
+			switch (id) {
+				case ENGINE_LEFT:
+					return Number(this.ship.isLeftEngineOn)
+				case ENGINE_RIGHT:
+					return Number(this.ship.isRightEngineOn)
+				case SENSOR_LEFT:
+					return Number(this.ship.isLeftSensorTriggered)
+				case SENSOR_RIGHT:
+					return Number(this.ship.isRightSensorTriggered)
+				case WEAPON:
+				default:
+					return 0
+			}
+		},
+		write: (id, value) => {
+			switch (id) {
+				case ENGINE_LEFT:
+					this.ship.isLeftEngineOn = Boolean(value)
+					break
+				case ENGINE_RIGHT:
+					this.ship.isRightEngineOn = Boolean(value)
+					break
+				case WEAPON:
+					this.ship.shouldFireBullet = Boolean(value)
+					break
+				case SENSOR_LEFT:
+				case SENSOR_RIGHT:
+				default:
+					break
+			}
+		},
+		print: (message) => this.showInOutput(message),
+	})
 
 	constructor() {
 		super()
@@ -48,7 +76,7 @@ function loop() {
 				<button id="sandbox-collapse">Collapse</button>
 				<button id="sandbox-fullscreen">Full Screen</button>
 				<button id="switch">Output</button>
-				<div id="editor">${this.deployedCode}</div>
+				<div id="editor"></div>
 				<textarea id="output" readonly style="display: none"></textarea>
 				<footer>
 					<button id="sandbox-pause">Pause</button>
@@ -60,6 +88,7 @@ function loop() {
 		const editor = ace.edit('editor', { useWorker: false })
 		editor.setTheme('ace/theme/github_dark')
 		editor.session.setMode('ace/mode/javascript')
+		editor.setValue(this.deployedCode, -1)
 
 		const pauseButton = document.getElementById('sandbox-pause') as HTMLButtonElement
 		const deployButton = document.getElementById('sandbox-deploy') as HTMLButtonElement
@@ -128,87 +157,12 @@ function loop() {
 	}
 
 	onPreUpdate(engine: ex.Engine, delta: number): void {
-		this.sinceLastSimulationMs += delta
-		if (this.isSimulating) {
-			this.sinceLastSimulationMs = 0
-		}
-		if (this.sinceLastSimulationMs >= TICK_MS) {
-			this.sinceLastSimulationMs = 0
-			this.simulate(engine)
-		}
+		this.runner.code = this.deployedCode
+		this.runner.update(engine, delta)
 	}
 
 	onPostUpdate(engine: ex.Engine, delta: number): void {
 		this.camera.pos = this.ship.pos
-	}
-
-	private async simulate(engine: ex.Engine) {
-		const globals = this.globals
-		try {
-			this.isSimulating = true
-			await Function(`
-				'use strict'
-				const { delay, g_has, g_get, g_set, print, read, write } = this
-				${
-				this.deployedCode
-					.replace('function loop()', 'async function loop()')
-					.replace(/\bdelay\s*\(\s*(\d+)\s*\)/g, `await delay($1 * ${TICK_MS})`)
-			}
-				;return loop()
-			`).bind({
-				delay(ms: number) {
-					return new Promise<void>((resolve) => engine.clock.schedule(resolve, ms))
-				},
-				g_has(name: string) {
-					return name in globals
-				},
-				g_get(name: string) {
-					return globals[name]
-				},
-				g_set(name: string, value: any) {
-					globals[name] = value
-				},
-				print: (...args: any[]) => {
-					this.showInOutput(args.join(' '))
-				},
-				read: (id: number) => {
-					switch (id) {
-						case ENGINE_LEFT:
-							return Number(this.ship.isLeftEngineOn)
-						case ENGINE_RIGHT:
-							return Number(this.ship.isRightEngineOn)
-						case SENSOR_LEFT:
-							return Number(this.ship.isLeftSensorTriggered)
-						case SENSOR_RIGHT:
-							return Number(this.ship.isRightSensorTriggered)
-						case WEAPON:
-						default:
-							return 0
-					}
-				},
-				write: (id: number, value: number) => {
-					switch (id) {
-						case ENGINE_LEFT:
-							this.ship.isLeftEngineOn = Boolean(value)
-							break
-						case ENGINE_RIGHT:
-							this.ship.isRightEngineOn = Boolean(value)
-							break
-						case WEAPON:
-							this.ship.shouldFireBullet = Boolean(value)
-							break
-						case SENSOR_LEFT:
-						case SENSOR_RIGHT:
-						default:
-							break
-					}
-				},
-			})()
-		} catch (e) {
-			this.showInOutput(`${e}`)
-		} finally {
-			this.isSimulating = false
-		}
 	}
 
 	private showInOutput(messsage: string) {

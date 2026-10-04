@@ -1,6 +1,6 @@
 import * as ex from 'excalibur'
 import Config from './config'
-import { Levels } from './levels'
+import { startNewRun } from './run/run-state'
 
 const rootDiv = document.getElementById('rootDiv') as HTMLDivElement
 export class MainMenu extends ex.Scene {
@@ -11,8 +11,8 @@ export class MainMenu extends ex.Scene {
 	onActivate(context: ex.SceneActivationContext) {
 		rootDiv.innerHTML = `
             <section id="main-menu" class="w-full flex flex-row gap-4">
-                <h1 id="h1-SS">StellarScript</h1>
-                <button id="level-select" class="button blue">Levels</button>
+                <h1 id="h1-SS">stellr.dev</h1>
+                <button id="new-run" class="button blue">New Run</button>
                 <button id="sandbox-button" class="button blue">Sandbox</button>
                 <div class="flex flex-row gap-4 justify-stretch w-60">
                     <button id="go-fullscreen" class="button yellow">Fullscreen</button>
@@ -40,10 +40,11 @@ export class MainMenu extends ex.Scene {
 			togglePhysicsButton.innerText = `Physics: ${Config.physicsMode}`
 		}
 
-		const levelSelectButton = document.getElementById('level-select') as HTMLButtonElement
+		const newRunButton = document.getElementById('new-run') as HTMLButtonElement
 
-		levelSelectButton.onclick = () => {
-			context.engine.goToScene('levels')
+		newRunButton.onclick = () => {
+			startNewRun()
+			context.engine.goToScene('hangar')
 		}
 	}
 
